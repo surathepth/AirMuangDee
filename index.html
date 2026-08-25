@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>เมืองแอร์ดี | บริการเรื่องแอร์ครบวงจร จองคิวช่างแอร์</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="เมืองแอร์ดี บริการซ่อมแอร์ ล้างแอร์ ติดตั้งแอร์ และจำหน่ายแอร์ อะไหล่แอร์ ครบจบในที่เดียว บริหารงานโดย TANANGKITGROUP">
+    <meta name="theme-color" content="#004c90">
+
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #004c90; /* สีน้ำเงินสไตล์ Q-CHANG */
+            --secondary-color: #ff6b48; /* สีส้มดึงดูดสายตา */
+            --bg-light: #f8f9fc;
+            --text-dark: #2c3e50;
+            --text-gray: #6c757d;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding-top: 60px; /* ชดเชย Navbar */
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-dark) !important;
+        }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #007bb5 100%);
+            color: #ffffff;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .hero-title {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .hero-subtitle {
+            font-weight: 300;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .btn-primary-custom {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(255, 107, 72, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 72, 0.4);
+            color: #fff;
+        }
+        .btn-outline-light-custom {
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 10px 28px;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-outline-light-custom:hover {
+            background-color: #ffffff;
+            color: var(--primary-color);
+        }
+
+        /* Services Categories */
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            width: 50%;
+            height: 4px;
+            background-color: var(--secondary-color);
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        .service-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            height: 100%;
+            border: 1px solid #f1f2f6;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-color: var(--primary-color);
+        }
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 15px auto;
+        }
+        .service-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .service-price {
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Product Section */
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 1px solid #f1f2f6;
+            margin-bottom: 20px;
+        }
+        .product-img {
+            background: #f8f9fc;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d1d8e0;
+            font-size: 3rem;
+            border-bottom: 1px solid #f1f2f6;
+        }
+        .product-body {
+            padding: 15px;
+        }
+        .product-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        /* Booking Steps */
+        .step-box {
+            text-align: center;
+            padding: 20px;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 auto 15px auto;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #001f37;
+            color: #ffffff;
+            padding: 50px 0 20px 0;
+            margin-top: 50px;
+        }
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .footer-contact i {
+            width: 25px;
+            color: var(--secondary-color);
+        }
+        .copyright {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .owner-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-snowflake text-info me-2"></i>เมืองแอร์ดี
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#services">บริการช่างแอร์</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#products">แอร์ & อะไหล่</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">ติดต่อเรา</a></li>
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <button class="btn btn-primary-custom btn-sm px-4">เข้าสู่ระบบ</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                    <span class="badge bg-light text-primary mb-3 py-2 px-3 rounded-pill fw-bold">อันดับ 1 บริการเรื่องแอร์</span>
+                    <h1 class="hero-title">บริการเรื่องแอร์ครบวงจร<br>จบทุกปัญหาในที่เดียว</h1>
+                    <p class="hero-subtitle">ล้าง ซ่อม ติดตั้ง และจำหน่ายแอร์/อะไหล่แอร์ ด้วยช่างมืออาชีพ รับประกันงานซ่อม มั่นใจได้ 100%</p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#services" class="btn btn-primary-custom"><i class="fa-solid fa-calendar-check me-2"></i>จองคิวช่างด่วน</a>
+                        <a href="#products" class="btn btn-outline-light-custom"><i class="fa-solid fa-shopping-cart me-2"></i>เลือกซื้อสินค้า</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <!-- Placeholder for Hero Image -->
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop" alt="ช่างแอร์ เมืองแอร์ดี" class="img-fluid rounded-4 shadow-lg" style="max-height: 350px; border: 4px solid rgba(255,255,255,0.2); object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5">
+        <div class="container py-4">
+            <div class="text-center">
+                <h2 class="section-title">บริการยอดฮิต</h2>
+                <p class="text-muted mb-5">เลือกบริการที่คุณต้องการ ระบบจะจัดหาคิวช่างให้ทันที</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Service 1 -->
+                <div class="col-6 col-md-3">
+                    <div class="service-card" onclick="alert('จองคิว: บริการล้างแอร์')">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-spray-can-sparkles"></i>
+                        </div>
+                        <h3 class="service-title">ล้างแอร์</h3>
+                        <p class="service-price">เริ่มต้น 500.-</p>
+                    </div>
+                </div>
+                <!-- Service 2 -->
+                <div class="col-6 col-md-3">
+                    <div class="service-card" onclick="alert('จองคิว: บริการซ่อมแอร์')">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h3 class="service-title">ซ่อมแอร์</h3>
+                        <p class="service-price">ประเมินหน้างาน</p>
+                    </div>
+                </div>
+                <!-- Service 3 -->
+                <div class="col-6 col-md-3">
+                    <div class="service-card" onclick="alert('จองคิว: บริการติดตั้งแอร์')">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-hammer"></i>
+                        </div>
+                        <h3 class="service-title">ติดตั้งแอร์</h3>
+                        <p class="service-price">เริ่มต้น 2,500.-</p>
+                    </div>
+                </div>
+                <!-- Service 4 -->
+                <div class="col-6 col-md-3">
+                    <div class="service-card" onclick="alert('จองคิว: ถอด/ย้ายแอร์')">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <h3 class="service-title">ถอด / ย้ายแอร์</h3>
+                        <p class="service-price">เริ่มต้น 1,500.-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="py-5 bg-white border-top border-bottom">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">จองช่างง่ายๆ ใน 3 ขั้นตอน</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="step-box">
+                        <div class="step-number">1</div>
+                        <h4 class="fw-bold">เลือกบริการ</h4>
+                        <p class="text-muted">เลือกล้าง ซ่อม ติดตั้ง และระบุปัญหา</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-box">
+                        <div class="step-number">2</div>
+                        <h4 class="fw-bold">เลือกวันเวลา</h4>
+                        <p class="text-muted">ระบบจะล็อกคิวช่างให้ทันที</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-box">
+                        <div class="step-number">3</div>
+                        <h4 class="fw-bold">รอรับบริการ</h4>
+                        <p class="text-muted">ช่างเข้าให้บริการตามเวลาที่กำหนด</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-5">
+        <div class="container py-4">
+            <div class="text-center">
+                <h2 class="section-title">แอร์และอะไหล่ (ร้านค้าออนไลน์)</h2>
+                <p class="text-muted mb-5">จำหน่ายเครื่องปรับอากาศและอะไหล่แท้จากศูนย์</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Product 1 -->
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <i class="fa-solid fa-fan"></i>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">แอร์อินเวอร์เตอร์ 12000 BTU รุ่นประหยัดไฟเบอร์ 5</h3>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="product-price">14,900.-</span>
+                                <button class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-cart-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <i class="fa-solid fa-fan"></i>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">แอร์อินเวอร์เตอร์ 18000 BTU ระบบอัจฉริยะ</h3>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="product-price">21,500.-</span>
+                                <button class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-cart-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">แผงวงจรคอยล์เย็น (Mainboard) แท้ศูนย์</h3>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="product-price">1,250.-</span>
+                                <button class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-cart-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">น้ำยาแอร์ R32 แท้ ขนาด 3 กิโลกรัม</h3>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="product-price">850.-</span>
+                                <button class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-cart-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="footer-logo"><i class="fa-solid fa-snowflake text-info me-2"></i>เมืองแอร์ดี</div>
+                    <p class="mb-4 pe-lg-5">ศูนย์รวมช่างแอร์คุณภาพและบริการดูแลแอร์ครบวงจร จอง จ่าย ออนไลน์ 24 ชม. ระบบจะล็อกคิวช่างให้ทันที คิวช่างพร้อมให้บริการ</p>
+                    <div class="owner-badge">
+                        <i class="fa-solid fa-user-tie me-2"></i> บริหารงานโดย: <strong>นายธนังกฤษ ชาลี (เฮียเมือง) เจ้าของกิจการ</strong>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="fw-bold mb-4">บริการของเรา</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75">บริการล้างแอร์</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75">บริการซ่อมแอร์</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75">บริการติดตั้งแอร์</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75">ร้านค้าอะไหล่แอร์</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-4">ติดต่อเรา (นิติบุคคล)</h5>
+                    <div class="footer-contact">
+                        <p class="mb-2 fw-bold text-info fs-5">TANANGKITGROUP</p>
+                        <p class="mb-2"><i class="fa-solid fa-phone"></i> 02-XXX-XXXX (สายด่วน)</p>
+                        <p class="mb-2"><i class="fa-brands fa-line"></i> @muangairdee</p>
+                        <p class="mb-2"><i class="fa-solid fa-envelope"></i> contact@tanangkitgroup.com</p>
+                        <p class="mb-0"><i class="fa-solid fa-location-dot"></i> 19/19 ถ.ชยางกูร ก ต.มุกดาหาร อ.เมืองมุกดาหาร จ.มุกดาหาร 49000</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary mt-4 pt-4 text-center opacity-75">
+                <p class="mb-1">&copy; 2026 <strong>TANANGKITGROUP</strong> - เมืองแอร์ดี (MUangaridee). All Rights Reserved.</p>
+                <p class="mb-0" style="font-size: 0.85rem;">ทะเบียนพาณิชย์เลขที่: 3490100451099</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase SDK (เฉพาะของเมืองแอร์ดี) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
+            authDomain: "muangairdee-62b3e.firebaseapp.com",
+            projectId: "muangairdee-62b3e",
+            storageBucket: "muangairdee-62b3e.firebasestorage.app",
+            messagingSenderId: "278310934572",
+            appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        console.log("Firebase 'MuangAirDee' Connected Successfully! 🚀");
+    </script>
+    
+    <script>
+        // Effect for navbar on scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').style.padding = '10px 0';
+                document.querySelector('.navbar').style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+            } else {
+                document.querySelector('.navbar').style.padding = '15px 0';
+                document.querySelector('.navbar').style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+            }
+        });
+    </script>
+</body>
+</html>
