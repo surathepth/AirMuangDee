@@ -23,7 +23,7 @@
         :root {
             --primary-color: #004c90; /* สีน้ำเงินสไตล์ Q-CHANG */
             --secondary-color: #ff6b48; /* สีส้มดึงดูดสายตา */
-            --bg-light: #f8f9fc;
+            --bg-light: #e6f2e8; /* สีเขียวอ่อนลดโลกร้อน สวยงามสบายตา */
             --text-dark: #2c3e50;
             --text-gray: #6c757d;
         }
@@ -37,8 +37,8 @@
 
         /* Navbar */
         .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            background-color: #c8e6c9; /* สีเขียวอ่อน พาสเทล สบายตา */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* กลับไปใช้เงามาตรฐานให้ดูนุ่มนวล */
             transition: all 0.3s ease;
         }
         .navbar-brand {
@@ -47,7 +47,9 @@
             font-size: 1.5rem;
         }
         .nav-link {
-            font-weight: 500;
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin: 0 15px;
             color: var(--text-dark) !important;
         }
         .nav-link:hover {
@@ -264,8 +266,9 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fa-solid fa-snowflake text-info me-2"></i>เมืองแอร์ดี
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="images/super_logo.jpg" alt="โลโก้เมืองแอร์ดี" style="height: 100px; object-fit: contain; border-radius: 12px; margin-right: 5px; mix-blend-mode: multiply;">
+                <span class="fw-bold" style="color: var(--primary-color); font-size: 2.4rem; letter-spacing: 1px;">เมืองแอร์ดี</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -276,7 +279,7 @@
                     <li class="nav-item"><a class="nav-link" href="#products">แอร์ & อะไหล่</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">ติดต่อเรา</a></li>
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <button class="btn btn-primary-custom btn-sm px-4">เข้าสู่ระบบ</button>
+                        <button class="btn btn-primary-custom px-5 py-2" style="font-size: 1.6rem; font-weight: 700; border-radius: 50px;" data-bs-toggle="modal" data-bs-target="#bookingModal">เข้าสู่ระบบ</button>
                     </li>
                 </ul>
             </div>
@@ -292,13 +295,42 @@
                     <h1 class="hero-title">บริการเรื่องแอร์ครบวงจร<br>จบทุกปัญหาในที่เดียว</h1>
                     <p class="hero-subtitle">ล้าง ซ่อม ติดตั้ง และจำหน่ายแอร์/อะไหล่แอร์ ด้วยช่างมืออาชีพ รับประกันงานซ่อม มั่นใจได้ 100%</p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                        <a href="#services" class="btn btn-primary-custom"><i class="fa-solid fa-calendar-check me-2"></i>จองคิวช่างด่วน</a>
+                        <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#bookingModal"><i class="fa-solid fa-calendar-check me-2"></i>จองคิวช่างด่วน</button>
                         <a href="#products" class="btn btn-outline-light-custom"><i class="fa-solid fa-shopping-cart me-2"></i>เลือกซื้อสินค้า</a>
                     </div>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <!-- Placeholder for Hero Image -->
-                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop" alt="ช่างแอร์ เมืองแอร์ดี" class="img-fluid rounded-4 shadow-lg" style="max-height: 350px; border: 4px solid rgba(255,255,255,0.2); object-fit: cover;">
+                    <!-- Hero Image Carousel -->
+                    <div id="heroCarousel" class="carousel slide carousel-fade rounded-4 shadow-lg" data-bs-ride="carousel" style="border: 4px solid rgba(255,255,255,0.2); overflow: hidden; max-height: 350px;">
+                                                                        <div class="carousel-inner">
+                            <div class="carousel-item active" data-bs-interval="4000">
+                                <img src="images/1.jpg" class="d-block w-100" alt="ผลงานติดตั้งและซ่อมแอร์ 1" style="height: 350px; object-fit: cover;">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="4000">
+                                <img src="images/2.jpg" class="d-block w-100" alt="ผลงานติดตั้งและซ่อมแอร์ 2" style="height: 350px; object-fit: cover;">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="4000">
+                                <img src="images/3.jpg" class="d-block w-100" alt="ผลงานติดตั้งและซ่อมแอร์ 3" style="height: 350px; object-fit: cover;">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="4000">
+                                <img src="images/4.jpg" class="d-block w-100" alt="ผลงานติดตั้งและซ่อมแอร์ 4" style="height: 350px; object-fit: cover;">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="4000">
+                                <img src="images/5.jpg" class="d-block w-100" alt="ผลงานติดตั้งและซ่อมแอร์ 5" style="height: 350px; object-fit: cover;">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="4000">
+                                <img src="images/6.jpg" class="d-block w-100" alt="ผลงานติดตั้งและซ่อมแอร์ 6" style="height: 350px; object-fit: cover;">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">ก่อนหน้า</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">ถัดไป</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -467,7 +499,10 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-5">
-                    <div class="footer-logo"><i class="fa-solid fa-snowflake text-info me-2"></i>เมืองแอร์ดี</div>
+                    <div class="footer-logo d-flex align-items-center mb-3">
+                        <img src="images/super_logo.jpg" alt="โลโก้เมืองแอร์ดี" style="height: 90px; object-fit: contain; border-radius: 16px; margin-right: 20px;">
+                        <span style="font-size: 2.5rem; font-weight: 800; letter-spacing: 1px;">เมืองแอร์ดี</span>
+                    </div>
                     <p class="mb-4 pe-lg-5">ศูนย์รวมช่างแอร์คุณภาพและบริการดูแลแอร์ครบวงจร จอง จ่าย ออนไลน์ 24 ชม. ระบบจะล็อกคิวช่างให้ทันที คิวช่างพร้อมให้บริการ</p>
                     <div class="owner-badge">
                         <i class="fa-solid fa-user-tie me-2"></i> บริหารงานโดย: <strong>นายธนังกฤษ ชาลี (เฮียเมือง) เจ้าของกิจการ</strong>
@@ -483,13 +518,13 @@
                     </ul>
                 </div>
                 <div class="col-lg-4">
-                    <h5 class="fw-bold mb-4">ติดต่อเรา (นิติบุคคล)</h5>
+                    <h5 class="fw-bold mb-4">ติดต่อเรา</h5>
                     <div class="footer-contact">
                         <p class="mb-2 fw-bold text-info fs-5">TANANGKITGROUP</p>
-                        <p class="mb-2"><i class="fa-solid fa-phone"></i> 02-XXX-XXXX (สายด่วน)</p>
-                        <p class="mb-2"><i class="fa-brands fa-line"></i> @muangairdee</p>
-                        <p class="mb-2"><i class="fa-solid fa-envelope"></i> contact@tanangkitgroup.com</p>
-                        <p class="mb-0"><i class="fa-solid fa-location-dot"></i> 19/19 ถ.ชยางกูร ก ต.มุกดาหาร อ.เมืองมุกดาหาร จ.มุกดาหาร 49000</p>
+                        <p class="mb-2"><i class="fa-solid fa-phone"></i> 088-5324179</p>
+                        <p class="mb-2"><i class="fa-brands fa-line"></i> 0885324179</p>
+                        <p class="mb-2"><i class="fa-solid fa-envelope"></i> thanakit14@gmail.com</p>
+                        <p class="mb-0"><i class="fa-solid fa-location-dot"></i> เลขที่ 19/19 ถนนชยางกูร ก ตำบลมุกดาหาร อำเภอเมืองมุกดาหาร จังหวัดมุกดาหาร 49000</p>
                     </div>
                 </div>
             </div>
@@ -504,9 +539,10 @@
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Firebase SDK (เฉพาะของเมืองแอร์ดี) -->
+        <!-- Firebase SDK (เฉพาะของเมืองแอร์ดี) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
@@ -516,9 +552,55 @@
             messagingSenderId: "278310934572",
             appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
         };
-
         const app = initializeApp(firebaseConfig);
-        console.log("Firebase 'MuangAirDee' Connected Successfully! 🚀");
+        const db = getFirestore(app);
+        console.log("Firebase & Firestore initialized successfully! 🚀");
+
+        // จัดการฟอร์มจองคิว (Booking Form)
+        const bookingForm = document.getElementById("bookingForm");
+        if(bookingForm) {
+            bookingForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                // ดึงข้อมูลจากฟอร์ม
+                const name = document.getElementById("customerName").value;
+                const phone = document.getElementById("customerPhone").value;
+                const service = document.getElementById("serviceType").value;
+                const details = document.getElementById("serviceDetails").value;
+                
+                // เปลี่ยนข้อความปุ่มระหว่างรอส่งข้อมูล
+                const submitBtn = bookingForm.querySelector("button[type='submit']");
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังบันทึกข้อมูล...';
+                submitBtn.disabled = true;
+
+                try {
+                    // ส่งเข้าตาราง bookings
+                    const docRef = await addDoc(collection(db, "bookings"), {
+                        customerName: name,
+                        customerPhone: phone,
+                        serviceType: service,
+                        serviceDetails: details,
+                        status: "รอดำเนินการ",
+                        createdAt: serverTimestamp()
+                    });
+                    
+                    alert("จองคิวสำเร็จ! ข้อมูลของคุณถูกส่งเรียบร้อยแล้ว ช่างจะรีบติดต่อกลับโดยเร็วที่สุดครับ (เลขอ้างอิง: " + docRef.id + ")");
+                    bookingForm.reset();
+                    
+                    // ปิด Modal อัตโนมัติ
+                    const bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
+                    if (bookingModal) bookingModal.hide();
+                    
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง หรือติดต่อเราโดยตรงผ่านเบอร์โทรศัพท์");
+                } finally {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
     </script>
     
     <script>
@@ -533,5 +615,48 @@
             }
         });
     </script>
+
+    <!-- Booking Modal (ฟอร์มจองคิวออนไลน์) -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 15px; overflow: hidden; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div class="modal-header text-white" style="background-color: var(--primary-color);">
+                    <h5 class="modal-title fw-bold" id="bookingModalLabel"><i class="fa-solid fa-clipboard-list me-2"></i>ฟอร์มจองคิว / ติดต่อช่าง</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4" style="background-color: #f8f9fa;">
+                    <form id="bookingForm">
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label fw-bold">ชื่อ-นามสกุล <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="customerName" placeholder="กรอกชื่อ-นามสกุลของคุณ" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label fw-bold">เบอร์โทรศัพท์ติดต่อ <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="customerPhone" placeholder="ตัวอย่าง: 0812345678" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="serviceType" class="form-label fw-bold">ประเภทบริการที่ต้องการ <span class="text-danger">*</span></label>
+                            <select class="form-select" id="serviceType" required>
+                                <option value="" selected disabled>-- เลือกบริการ --</option>
+                                <option value="ล้างแอร์">ล้างแอร์</option>
+                                <option value="ซ่อมแอร์">ซ่อมแอร์</option>
+                                <option value="ติดตั้งแอร์">ติดตั้งแอร์ใหม่</option>
+                                <option value="ซื้ออะไหล่">สอบถาม/ซื้ออะไหล่</option>
+                                <option value="อื่นๆ">บริการอื่นๆ</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="serviceDetails" class="form-label fw-bold">รายละเอียดเพิ่มเติม / อาการเสีย</label>
+                            <textarea class="form-control" id="serviceDetails" rows="3" placeholder="ระบุอาการเสีย หรือสถานที่คร่าวๆ"></textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary-custom py-2 fw-bold" style="font-size: 1.2rem;">ยืนยันการจองคิว</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
