@@ -145,8 +145,15 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${dateStr}</td>
-                        <td class="fw-bold">${data.customerName || '-'}</td>
-                        <td><a href="tel:${data.customerPhone}">${data.customerPhone || '-'}</a></td>
+                        <td class="fw-bold">
+                            ${data.customerName || '-'}
+                            ${data.customerAddress ? `<br><small class="text-muted fw-normal"><i class="fa-solid fa-location-dot me-1"></i>${data.customerAddress}</small>` : ''}
+                            ${data.locationMapLink ? `<br><a href="${data.locationMapLink}" target="_blank" class="btn btn-sm btn-outline-success mt-1" style="font-size: 0.75rem;"><i class="fa-solid fa-map-location-dot me-1"></i>เปิดแผนที่นำทาง GPS</a>` : ''}
+                        </td>
+                        <td>
+                            <a href="tel:${data.customerPhone}">${data.customerPhone || '-'}</a>
+                            ${data.customerContactExtra ? `<br><small class="text-muted fw-normal"><i class="fa-regular fa-envelope me-1"></i>${data.customerContactExtra}</small>` : ''}
+                        </td>
                         <td><span class="badge bg-info text-dark">${data.serviceType || '-'}</span></td>
                         <td>${data.serviceDetails || '-'}</td>
                         <td><span class="status-badge ${statusClass}">${data.status || 'รอดำเนินการ'}</span></td>

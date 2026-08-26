@@ -14,6 +14,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- JQuery Thailand CSS -->
+    <link rel="stylesheet" href="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.css">
+    
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -563,6 +569,21 @@
                 // ดึงข้อมูลจากฟอร์ม
                 const name = document.getElementById("customerName").value;
                 const phone = document.getElementById("customerPhone").value;
+                const contactExtra = document.getElementById("customerContactExtra") ? document.getElementById("customerContactExtra").value : '';
+                const house = document.getElementById("addr_house").value;
+                const subdistrict = document.getElementById("addr_subdistrict").value;
+                const district = document.getElementById("addr_district").value;
+                const province = document.getElementById("addr_province").value;
+                const zipcode = document.getElementById("addr_zipcode").value;
+                const address = `${house} ต.${subdistrict} อ.${district} จ.${province} ${zipcode}`;
+                
+                const lat = document.getElementById("addr_lat").value;
+                const lng = document.getElementById("addr_lng").value;
+                let locationMapLink = '';
+                if(lat && lng) {
+                    locationMapLink = `https://www.google.com/maps?q=${lat},${lng}`;
+                }
+
                 const service = document.getElementById("serviceType").value;
                 const details = document.getElementById("serviceDetails").value;
                 
@@ -577,6 +598,9 @@
                     const docRef = await addDoc(collection(db, "bookings"), {
                         customerName: name,
                         customerPhone: phone,
+                        customerContactExtra: contactExtra,
+                        customerAddress: address,
+                        locationMapLink: locationMapLink,
                         serviceType: service,
                         serviceDetails: details,
                         status: "รอดำเนินการ",
@@ -633,6 +657,37 @@
                             <input type="tel" class="form-control" id="customerPhone" placeholder="ตัวอย่าง: 0812345678" required>
                         </div>
                         <div class="mb-3">
+                            <label for="customerContactExtra" class="form-label fw-bold">อีเมล / ไอดีไลน์ <span class="text-muted fw-normal">(ถ้ามี)</span></label>
+                            <input type="text" class="form-control" id="customerContactExtra" placeholder="Email หรือ ID Line ของคุณ">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ที่อยู่จัดส่ง / หน้างาน <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control mb-2" id="addr_house" placeholder="บ้านเลขที่ หมู่บ้าน ซอย ถนน" required>
+                            <div class="row g-2 mb-2">
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="addr_subdistrict" placeholder="ตำบล/แขวง" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="addr_district" placeholder="อำเภอ/เขต" required>
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="addr_province" placeholder="จังหวัด" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="tel" class="form-control" id="addr_zipcode" placeholder="รหัสไปรษณีย์" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">พิกัดแผนที่ GPS <span class="text-muted fw-normal">(เพื่อความแม่นยำ)</span></label>
+                            <button type="button" class="btn btn-outline-primary w-100 mb-2" id="btnGetLocation"><i class="fa-solid fa-location-crosshairs me-2"></i>ดึงพิกัดตำแหน่งปัจจุบันของฉัน</button>
+                            <div id="map" style="height: 250px; border-radius: 8px; border: 1px solid #ced4da; display: none; z-index: 1;"></div>
+                            <input type="hidden" id="addr_lat">
+                            <input type="hidden" id="addr_lng">
+                        </div>
+                        <div class="mb-3">
                             <label for="serviceType" class="form-label fw-bold">ประเภทบริการที่ต้องการ <span class="text-danger">*</span></label>
                             <select class="form-select" id="serviceType" required>
                                 <option value="" selected disabled>-- เลือกบริการ --</option>
@@ -656,5 +711,81 @@
         </div>
     </div>
 
+    <!-- jQuery & jquery.Thailand.js -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/JQL.min.js"></script>
+    <script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.js"></script>
+    <script>
+        $.Thailand({
+            $district: $('#addr_subdistrict'), // input ของตำบล
+            $amphoe: $('#addr_district'), // input ของอำเภอ
+            $province: $('#addr_province'), // input ของจังหวัด
+            $zipcode: $('#addr_zipcode') // input ของรหัสไปรษณีย์
+        });
+    </script>
+
+    <!-- Leaflet JS for Map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        let map, marker;
+        const mapDiv = document.getElementById('map');
+        const btnGetLocation = document.getElementById('btnGetLocation');
+        const latInput = document.getElementById('addr_lat');
+        const lngInput = document.getElementById('addr_lng');
+        
+        // Show map only when Modal is opened (to fix Leaflet rendering issues in hidden modals)
+        document.getElementById('bookingModal').addEventListener('shown.bs.modal', function () {
+            if(!map) {
+                // Initialize map with a default center (e.g. Mukdahan)
+                map = L.map('map').setView([16.543, 104.722], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+                
+                marker = L.marker([16.543, 104.722], {draggable: true}).addTo(map);
+                
+                // Update hidden inputs when marker is dragged
+                marker.on('dragend', function(e) {
+                    const position = marker.getLatLng();
+                    latInput.value = position.lat;
+                    lngInput.value = position.lng;
+                });
+            } else {
+                map.invalidateSize();
+            }
+        });
+
+        // Get Location Button
+        btnGetLocation.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                btnGetLocation.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังค้นหา...';
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    latInput.value = lat;
+                    lngInput.value = lng;
+                    
+                    mapDiv.style.display = 'block';
+                    if(map) {
+                        map.invalidateSize();
+                        map.setView([lat, lng], 16);
+                        marker.setLatLng([lat, lng]);
+                    }
+                    
+                    btnGetLocation.innerHTML = '<i class="fa-solid fa-check text-success me-2"></i>ดึงพิกัดสำเร็จ (เลื่อนหมุดให้ตรงบ้านได้)';
+                    btnGetLocation.classList.replace('btn-outline-primary', 'btn-light');
+                    btnGetLocation.classList.add('border-success', 'text-success');
+                }, function(error) {
+                    alert('ไม่สามารถดึงพิกัดได้ กรุณาเปิด GPS/อนุญาต Location');
+                    btnGetLocation.innerHTML = '<i class="fa-solid fa-location-crosshairs me-2"></i>ดึงพิกัดตำแหน่งปัจจุบันของฉัน';
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("เบราว์เซอร์ของคุณไม่รองรับระบบพิกัด GPS");
+            }
+        });
+    </script>
 </body>
 </html>
