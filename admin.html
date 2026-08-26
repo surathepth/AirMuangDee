@@ -52,7 +52,20 @@
 
     <!-- Main Content -->
     <div class="container-fluid px-4">
-        <div class="row">
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold text-success" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings-panel" type="button" role="tab"><i class="fa-solid fa-list me-2"></i>รายการจองคิวลูกค้า</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold text-primary" id="techs-tab" data-bs-toggle="tab" data-bs-target="#techs-panel" type="button" role="tab"><i class="fa-solid fa-users-gear me-2"></i>จัดการทีมช่าง</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="adminTabsContent">
+            <!-- ================= BOOKINGS TAB ================= -->
+            <div class="tab-pane fade show active" id="bookings-panel" role="tabpanel">
+                <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -88,6 +101,45 @@
                     </div>
                 </div>
             </div>
+            </div> <!-- End Bookings Tab -->
+
+            <!-- ================= TECHS TAB ================= -->
+            <div class="tab-pane fade" id="techs-panel" role="tabpanel">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 fw-bold text-primary"><i class="fa-solid fa-helmet-safety me-2"></i>รายชื่อช่างในระบบ</h5>
+                                <button class="btn btn-outline-primary btn-sm" onclick="window.fetchTechnicians()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชข้อมูลช่าง</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>ชื่อ-นามสกุล</th>
+                                                <th>เบอร์โทร</th>
+                                                <th>พื้นที่รับงาน</th>
+                                                <th>พิกัดล่าสุด</th>
+                                                <th>สถานะการทำงาน</th>
+                                                <th>จัดการ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="techsTableBody">
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4 text-muted">
+                                                    <i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังโหลดข้อมูลช่าง...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Techs Tab -->
+        </div> <!-- End Tab Content -->
         </div>
     </div>
 
@@ -97,7 +149,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         // ใช้ Config เดียวกับเว็บหน้าบ้าน
         const firebaseConfig = {
@@ -138,11 +190,30 @@
                         dateStr = date.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
                     }
 
-                    // จัดการป้ายสถานะ
-                    let statusClass = data.status === "เสร็จสิ้น" ? "status-success" : "status-pending";
-                    let actionBtn = data.status === "เสร็จสิ้น" 
-                        ? `<button class="btn btn-sm btn-secondary" disabled><i class="fa-solid fa-check"></i> เสร็จแล้ว</button>`
-                        : `<button class="btn btn-sm btn-success" onclick="updateStatus('${docId}')"><i class="fa-solid fa-check"></i> กดรับงาน</button>`;
+                    // จัดการปุ่มสถานะ
+                    let statusClass = data.status === "เสร็จสิ้น" || data.status === "เสร็จสมบูรณ์" ? "status-success" : "status-pending";
+                    
+                    let actionBtn = "";
+                    if(data.status === "เสร็จสิ้น" || data.status === "เสร็จสมบูรณ์") {
+                        actionBtn = `<button class="btn btn-sm btn-secondary" disabled><i class="fa-solid fa-check"></i> งานเสร็จแล้ว</button>`;
+                    } else if(data.assignedTechId) {
+                        actionBtn = `<button class="btn btn-sm btn-info text-white" disabled><i class="fa-solid fa-helmet-safety"></i> จ่ายงานแล้ว</button>`;
+                    } else {
+                        // เก็บพิกัดลูกค้าไว้ใน attribute เพื่อส่งไปให้ Modal
+                        let custLat = data.locationMapLink ? data.locationMapLink.split('=')[1].split(',')[0] : '';
+                        let custLng = data.locationMapLink ? data.locationMapLink.split(',')[1] : '';
+                        
+                        if(custLat && custLng) {
+                            actionBtn = `<button class="btn btn-sm btn-success fw-bold shadow-sm" onclick="window.openDispatchModal('${docId}', ${custLat}, ${custLng})">
+                                <i class="fa-solid fa-truck-fast me-1"></i> จ่ายงาน
+                            </button>`;
+                        } else {
+                            // กรณีไม่มี GPS ลูกค้า ก็กดจ่ายงานได้ แต่ระยะทางอาจจะคำนวณไม่ได้
+                            actionBtn = `<button class="btn btn-sm btn-warning fw-bold shadow-sm" onclick="window.openDispatchModal('${docId}', 0, 0)">
+                                <i class="fa-solid fa-truck-fast me-1"></i> จ่ายงาน (ไม่มี GPS)
+                            </button>`;
+                        }
+                    }
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -189,5 +260,39 @@
         // โหลดข้อมูลทันทีเมื่อเปิดหน้า
         fetchBookings();
     </script>
+
+    <!-- ================= MODAL DISPATCH ================= -->
+    <div class="modal fade" id="dispatchModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fa-solid fa-map-location-dot me-2"></i>ระบบจ่ายงานให้ช่าง (ค้นหาช่างที่ใกล้ที่สุด)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <strong>พิกัดลูกค้า:</strong> <span id="modalCustomerLoc">กำลังโหลด...</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ลำดับ</th>
+                                    <th>ชื่อช่าง</th>
+                                    <th>สถานะ</th>
+                                    <th>ระยะทาง (กม.)</th>
+                                    <th>จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dispatchTableBody">
+                                <tr><td colspan="5" class="text-center">กำลังคำนวณระยะทาง...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

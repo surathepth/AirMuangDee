@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ช่างแอร์ - เมืองแอร์ดี</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .navbar-tech {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+        .job-card {
+            border-left: 5px solid #ffc107;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .job-card:hover {
+            transform: translateY(-3px);
+        }
+        .status-toggle {
+            cursor: pointer;
+        }
+        #loginSection, #dashboardSection {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-tech shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>ระบบรับงานช่าง
+            </a>
+            <button class="btn btn-outline-light btn-sm" id="btnLogout" style="display:none;">
+                <i class="fa-solid fa-right-from-bracket me-1"></i>ออกจากระบบ
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-5">
+        
+        <!-- ================= LOGIN SECTION ================= -->
+        <div class="row justify-content-center" id="loginSection">
+            <div class="col-md-5">
+                <div class="card shadow-sm border-0 rounded-4 mt-5">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-4 text-primary">
+                            <i class="fa-solid fa-user-gear fa-4x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-4">เข้าสู่ระบบช่าง</h4>
+                        <form id="loginForm">
+                            <div class="mb-3 text-start">
+                                <label class="form-label fw-bold">เบอร์โทรศัพท์ที่ลงทะเบียนไว้</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fa-solid fa-phone text-muted"></i></span>
+                                    <input type="tel" class="form-control form-control-lg" id="loginPhone" placeholder="08X-XXX-XXXX" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mt-3 rounded-pill shadow-sm" id="btnLogin">
+                                เข้าสู่ระบบ
+                            </button>
+                        </form>
+                        <div class="mt-4 small text-muted">
+                            ยังไม่ได้ลงทะเบียน? <a href="tech_register.html" class="text-decoration-none fw-bold">สมัครเป็นช่างคลิกที่นี่</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= DASHBOARD SECTION ================= -->
+        <div id="dashboardSection">
+            
+            <!-- Tech Info & Controls -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1" id="displayTechName"><i class="fa-solid fa-user text-primary me-2"></i>กำลังโหลด...</h5>
+                                    <span class="badge bg-info text-dark"><i class="fa-solid fa-map-pin me-1"></i>พื้นที่: <span id="displayTechArea">-</span></span>
+                                </div>
+                                
+                                <div class="d-flex gap-3 align-items-center">
+                                    <div class="form-check form-switch fs-5">
+                                        <input class="form-check-input status-toggle" type="checkbox" role="switch" id="techStatusSwitch">
+                                        <label class="form-check-label fw-bold text-secondary" id="techStatusLabel" for="techStatusSwitch">Offline (ปิดรับงาน)</label>
+                                    </div>
+                                    <button class="btn btn-outline-primary" id="btnUpdateGPS">
+                                        <i class="fa-solid fa-location-crosshairs me-1"></i>อัปเดตพิกัด
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- แผนที่ซ่อนอยู่ ใช้ดึงพิกัด -->
+                            <div id="map" style="display:none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Inbox -->
+            <h5 class="fw-bold mb-3"><i class="fa-solid fa-clipboard-list me-2 text-primary"></i>งานที่ได้รับมอบหมาย</h5>
+            <div id="jobInboxList" class="row g-3">
+                <!-- Data will be populated here by JS -->
+                <div class="col-12 text-center text-muted py-5" id="noJobMessage">
+                    <i class="fa-solid fa-box-open fa-3x mb-3 text-light"></i>
+                    <p>ยังไม่มีงานที่ได้รับมอบหมายในขณะนี้</p>
+                </div>
+            </div>
+
+        </div> <!-- End Dashboard Section -->
+
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, updateDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
+            authDomain: "muangairdee-62b3e.firebaseapp.com",
+            projectId: "muangairdee-62b3e",
+            storageBucket: "muangairdee-62b3e.firebasestorage.app",
+            messagingSenderId: "278310934572",
+            appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // State variables
+        let currentTechId = localStorage.getItem('techId');
+        let currentTechData = null;
+
+        // UI Elements
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const btnLogout = document.getElementById('btnLogout');
+        const loginForm = document.getElementById('loginForm');
+        
+        // Dashboard UI Elements
+        const displayTechName = document.getElementById('displayTechName');
+        const displayTechArea = document.getElementById('displayTechArea');
+        const techStatusSwitch = document.getElementById('techStatusSwitch');
+        const techStatusLabel = document.getElementById('techStatusLabel');
+        const btnUpdateGPS = document.getElementById('btnUpdateGPS');
+        const jobInboxList = document.getElementById('jobInboxList');
+        const noJobMessage = document.getElementById('noJobMessage');
+
+        // ตรวจสอบสถานะการ Login
+        if (currentTechId) {
+            showDashboard();
+            loadTechData();
+            listenToJobs();
+        } else {
+            loginSection.style.display = 'flex';
+        }
+
+        // ================= LOGIC: LOGIN =================
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('loginPhone').value.trim();
+            const btn = document.getElementById('btnLogin');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังตรวจสอบ...';
+            btn.disabled = true;
+
+            try {
+                // ค้นหาเบอร์โทรใน collection technicians
+                const q = query(collection(db, "technicians"), where("techPhone", "==", phone));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    alert("ไม่พบเบอร์โทรศัพท์นี้ในระบบ กรุณาตรวจสอบอีกครั้งหรือลงทะเบียนใหม่");
+                } else {
+                    const techDoc = querySnapshot.docs[0];
+                    const data = techDoc.data();
+                    
+                    if(data.status !== "อนุมัติแล้ว") {
+                        alert("บัญชีของคุณอยู่ระหว่างรอแอดมินอนุมัติ กรุณาติดต่อแอดมิน");
+                    } else {
+                        // Login Success
+                        localStorage.setItem('techId', techDoc.id);
+                        currentTechId = techDoc.id;
+                        loginSection.style.display = 'none';
+                        showDashboard();
+                        loadTechData();
+                        listenToJobs();
+                    }
+                }
+            } catch(error) {
+                console.error("Login Error:", error);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อระบบ");
+            } finally {
+                btn.innerHTML = 'เข้าสู่ระบบ';
+                btn.disabled = false;
+            }
+        });
+
+        // ================= LOGIC: LOGOUT =================
+        btnLogout.addEventListener('click', () => {
+            localStorage.removeItem('techId');
+            currentTechId = null;
+            dashboardSection.style.display = 'none';
+            btnLogout.style.display = 'none';
+            loginSection.style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        });
+
+        // ================= LOGIC: DASHBOARD =================
+        function showDashboard() {
+            dashboardSection.style.display = 'block';
+            btnLogout.style.display = 'block';
+        }
+
+        async function loadTechData() {
+            if(!currentTechId) return;
+            
+            // ดึงข้อมูลช่างแบบ Realtime
+            onSnapshot(doc(db, "technicians", currentTechId), (docSnap) => {
+                if (docSnap.exists()) {
+                    currentTechData = docSnap.data();
+                    displayTechName.innerHTML = `<i class="fa-solid fa-user text-primary me-2"></i>ช่าง${currentTechData.techName}`;
+                    displayTechArea.innerText = currentTechData.techArea;
+                    
+                    // อัปเดตสวิตช์สถานะ
+                    const isOnline = currentTechData.currentStatus === "Online";
+                    techStatusSwitch.checked = isOnline;
+                    updateStatusLabel(isOnline);
+                } else {
+                    // หากเอกสารโดนลบ ให้เตะออก
+                    btnLogout.click();
+                }
+            });
+        }
+
+        function updateStatusLabel(isOnline) {
+            if(isOnline) {
+                techStatusLabel.innerText = "Online (พร้อมรับงาน)";
+                techStatusLabel.className = "form-check-label fw-bold text-success";
+            } else {
+                techStatusLabel.innerText = "Offline (ปิดรับงาน)";
+                techStatusLabel.className = "form-check-label fw-bold text-secondary";
+            }
+        }
+
+        // กดเปิด-ปิด การรับงาน
+        techStatusSwitch.addEventListener('change', async (e) => {
+            if(!currentTechId) return;
+            const newStatus = e.target.checked ? "Online" : "Offline";
+            updateStatusLabel(e.target.checked);
+            
+            try {
+                await updateDoc(doc(db, "technicians", currentTechId), {
+                    currentStatus: newStatus
+                });
+            } catch(error) {
+                console.error("Status Update Error:", error);
+                alert("ไม่สามารถอัปเดตสถานะได้");
+                e.target.checked = !e.target.checked; // Revert UI
+                updateStatusLabel(!e.target.checked);
+            }
+        });
+
+        // กดอัปเดตพิกัด GPS ปัจจุบัน
+        btnUpdateGPS.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                btnUpdateGPS.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> รอพิกัด...';
+                btnUpdateGPS.disabled = true;
+
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    try {
+                        await updateDoc(doc(db, "technicians", currentTechId), {
+                            baseLocation: { lat: lat, lng: lng }
+                        });
+                        alert("อัปเดตพิกัดปัจจุบันของคุณเรียบร้อยแล้ว แอดมินจะเห็นตำแหน่งล่าสุดของคุณ");
+                    } catch(err) {
+                        console.error(err);
+                        alert("อัปเดตพิกัดล้มเหลว");
+                    } finally {
+                        btnUpdateGPS.innerHTML = '<i class="fa-solid fa-location-crosshairs me-1"></i>อัปเดตพิกัด';
+                        btnUpdateGPS.disabled = false;
+                    }
+                }, (error) => {
+                    alert('ไม่สามารถดึงพิกัดได้ กรุณาเปิด GPS ในมือถือ/เบราว์เซอร์');
+                    btnUpdateGPS.innerHTML = '<i class="fa-solid fa-location-crosshairs me-1"></i>อัปเดตพิกัด';
+                    btnUpdateGPS.disabled = false;
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("เบราว์เซอร์ของคุณไม่รองรับ GPS");
+            }
+        });
+
+        // ================= LOGIC: REALTIME INBOX =================
+        function listenToJobs() {
+            if(!currentTechId) return;
+            
+            // ค้นหางานที่ assignedTechId ตรงกับช่างคนนี้ และสถานะไม่ใช่ ยกเลิก หรือ เสร็จสมบูรณ์
+            const q = query(
+                collection(db, "bookings"),
+                where("assignedTechId", "==", currentTechId)
+            );
+
+            onSnapshot(q, (snapshot) => {
+                // กรองงานที่จบไปแล้วหรือยกเลิกออก (ทำฝั่ง Client เพื่อความยืดหยุ่น)
+                const activeJobs = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if(data.status !== "ยกเลิก" && data.status !== "เสร็จสมบูรณ์") {
+                        activeJobs.push({ id: docSnap.id, ...data });
+                    }
+                });
+
+                if(activeJobs.length === 0) {
+                    noJobMessage.style.display = 'block';
+                    // ซ่อนการ์ดงานเก่าทั้งหมด
+                    Array.from(jobInboxList.children).forEach(child => {
+                        if(child.id !== 'noJobMessage') child.remove();
+                    });
+                } else {
+                    noJobMessage.style.display = 'none';
+                    renderJobs(activeJobs);
+                }
+            });
+        }
+
+        function renderJobs(jobs) {
+            // เคลียร์รายการเก่า (ยกเว้น noJobMessage)
+            Array.from(jobInboxList.children).forEach(child => {
+                if(child.id !== 'noJobMessage') child.remove();
+            });
+
+            // เรียงงานจากใหม่ไปเก่า (อ้างอิง createdAt)
+            jobs.sort((a,b) => {
+                const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
+                const timeB = b.createdAt ? b.createdAt.toMillis() : 0;
+                return timeB - timeA;
+            });
+
+            jobs.forEach(job => {
+                const date = job.createdAt ? new Date(job.createdAt.toMillis()).toLocaleString('th-TH') : "ไม่ระบุเวลา";
+                
+                // แปลงพิกัดเป็นปุ่มนำทาง Google Maps
+                let navButton = '';
+                if(job.locationMapLink) {
+                    navButton = `<a href="${job.locationMapLink}" target="_blank" class="btn btn-sm btn-success w-100 fw-bold mt-2"><i class="fa-solid fa-map-location-dot me-1"></i>นำทางไปบ้านลูกค้า</a>`;
+                }
+
+                const html = `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card job-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i>รอช่างติดต่อกลับ</span>
+                                    <small class="text-muted">${date.split(' ')[0]}</small>
+                                </div>
+                                <h5 class="fw-bold text-primary mb-1">${job.serviceType}</h5>
+                                <p class="small text-muted mb-3">${job.serviceDetails}</p>
+                                
+                                <hr class="my-2">
+                                
+                                <div class="mb-2">
+                                    <i class="fa-solid fa-user me-2 text-secondary"></i><b>${job.customerName}</b>
+                                </div>
+                                <div class="mb-2">
+                                    <i class="fa-solid fa-phone me-2 text-secondary"></i><a href="tel:${job.customerPhone}" class="text-decoration-none fw-bold">${job.customerPhone}</a>
+                                </div>
+                                <div class="mb-2 small">
+                                    <i class="fa-solid fa-location-dot me-2 text-secondary"></i>${job.customerAddress}
+                                </div>
+                                
+                                ${navButton}
+
+                                <button class="btn btn-sm btn-outline-primary w-100 mt-2 btn-complete-job" data-id="${job.id}">
+                                    <i class="fa-solid fa-check me-1"></i>กดปิดงาน (เสร็จสมบูรณ์)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                jobInboxList.insertAdjacentHTML('beforeend', html);
+            });
+
+            // ผูก Event ให้ปุ่มปิดงาน
+            document.querySelectorAll('.btn-complete-job').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const jobId = e.target.closest('button').dataset.id;
+                    if(confirm("ยืนยันว่าทำงานนี้เสร็จสิ้นและเก็บเงินเรียบร้อยแล้วใช่หรือไม่?")) {
+                        try {
+                            await updateDoc(doc(db, "bookings", jobId), {
+                                status: "เสร็จสมบูรณ์"
+                            });
+                            alert("ปิดงานสำเร็จ! งานนี้จะถูกย้ายออกจากกล่องรับงานของคุณ");
+                        } catch(err) {
+                            console.error(err);
+                            alert("เกิดข้อผิดพลาดในการปิดงาน");
+                        }
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
