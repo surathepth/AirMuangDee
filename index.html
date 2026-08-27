@@ -282,8 +282,9 @@
                     <li class="nav-item"><a class="nav-link" href="#services">บริการช่างแอร์</a></li>
                     <li class="nav-item"><a class="nav-link" href="#products">แอร์ & อะไหล่</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">ติดต่อเรา</a></li>
-                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <button class="btn btn-primary-custom px-4 py-2" style="border-radius: 50px;" data-bs-toggle="modal" data-bs-target="#bookingModal">เข้าสู่ระบบ</button>
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex gap-2">
+                        <button class="btn btn-primary-custom px-4 py-2" style="border-radius: 50px;" data-bs-toggle="modal" data-bs-target="#bookingModal">จองคิว</button>
+                        <a href="customer_dashboard.html" class="btn text-white px-4 py-2" style="background-color: #ff7a45; border-radius: 50px; font-weight: 500; transition: all 0.3s;"><i class="fa-solid fa-user me-1"></i> เข้าสู่ระบบ</a>
                     </li>
                 </ul>
             </div>
@@ -298,9 +299,10 @@
                     <span class="badge bg-light text-primary mb-3 py-2 px-3 rounded-pill fw-bold">อันดับ 1 บริการเรื่องแอร์</span>
                     <h1 class="hero-title">บริการเรื่องแอร์ครบวงจร<br>จบทุกปัญหาในที่เดียว</h1>
                     <p class="hero-subtitle">ล้าง ซ่อม ติดตั้ง และจำหน่ายแอร์/อะไหล่แอร์ ด้วยช่างมืออาชีพ รับประกันงานซ่อม มั่นใจได้ 100%</p>
-                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                        <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#bookingModal"><i class="fa-solid fa-calendar-check me-2"></i>จองคิวช่างด่วน</button>
-                        <a href="#products" class="btn btn-outline-light-custom"><i class="fa-solid fa-shopping-cart me-2"></i>เลือกซื้อสินค้า</a>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mt-3">
+                        <a href="#products" class="btn btn-outline-light px-5 py-3 fw-bold rounded-pill d-inline-flex align-items-center justify-content-center" style="font-size: 1.3rem; border-width: 3px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,255,255,0.2); hover:bg-white; hover:text-primary;">
+                            <i class="fa-solid fa-cart-shopping fa-lg me-3"></i> เลือกซื้อสินค้า
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-6 text-center">
@@ -348,47 +350,65 @@
                 <p class="text-muted mb-5">เลือกบริการที่คุณต้องการ ระบบจะจัดหาคิวช่างให้ทันที</p>
             </div>
             
-            <div class="row g-4">
-                <!-- Service 1 -->
-                <div class="col-6 col-md-3">
-                    <div class="service-card" onclick="alert('จองคิว: บริการล้างแอร์')">
-                        <div class="service-icon">
-                            <i class="fa-solid fa-spray-can-sparkles"></i>
+            <div class="row g-4 align-items-stretch">
+                
+                <!-- Left Side: 4 Service Icons (Grid 2x2) -->
+                <div class="col-lg-7">
+                    <div class="row g-4 h-100">
+                        <!-- Service 1 -->
+                        <div class="col-6">
+                            <div class="service-card h-100 d-flex flex-column justify-content-center" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="setTimeout(()=>document.getElementById('service').value='ล้างแอร์', 200)">
+                                <div class="service-icon mb-3">
+                                    <i class="fa-solid fa-spray-can-sparkles"></i>
+                                </div>
+                                <h3 class="service-title">ล้างแอร์</h3>
+                                <p class="service-price mb-0">เริ่มต้น 500.-</p>
+                            </div>
                         </div>
-                        <h3 class="service-title">ล้างแอร์</h3>
-                        <p class="service-price">เริ่มต้น 500.-</p>
+                        <!-- Service 2 -->
+                        <div class="col-6">
+                            <div class="service-card h-100 d-flex flex-column justify-content-center" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="setTimeout(()=>document.getElementById('service').value='ซ่อมแอร์', 200)">
+                                <div class="service-icon mb-3">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                </div>
+                                <h3 class="service-title">ซ่อมแอร์</h3>
+                                <p class="service-price mb-0">ประเมินหน้างาน</p>
+                            </div>
+                        </div>
+                        <!-- Service 3 -->
+                        <div class="col-6">
+                            <div class="service-card h-100 d-flex flex-column justify-content-center" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="setTimeout(()=>document.getElementById('service').value='ติดตั้งแอร์', 200)">
+                                <div class="service-icon mb-3">
+                                    <i class="fa-solid fa-hammer"></i>
+                                </div>
+                                <h3 class="service-title">ติดตั้งแอร์</h3>
+                                <p class="service-price mb-0">เริ่มต้น 2,500.-</p>
+                            </div>
+                        </div>
+                        <!-- Service 4 -->
+                        <div class="col-6">
+                            <div class="service-card h-100 d-flex flex-column justify-content-center" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="setTimeout(()=>document.getElementById('service').value='ถอด/ย้ายแอร์', 200)">
+                                <div class="service-icon mb-3">
+                                    <i class="fa-solid fa-truck-fast"></i>
+                                </div>
+                                <h3 class="service-title">ถอด / ย้ายแอร์</h3>
+                                <p class="service-price mb-0">เริ่มต้น 1,500.-</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Service 2 -->
-                <div class="col-6 col-md-3">
-                    <div class="service-card" onclick="alert('จองคิว: บริการซ่อมแอร์')">
-                        <div class="service-icon">
-                            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                <!-- Right Side: Giant Orange Booking Button -->
+                <div class="col-lg-5 mt-4 mt-lg-0">
+                    <div class="card border-0 shadow-lg h-100 rounded-4" style="background: linear-gradient(135deg, #ff7a45, #ff512f); cursor: pointer; transition: transform 0.3s; min-height: 250px;" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center text-white p-5">
+                            <i class="fa-regular fa-calendar-check fa-5x mb-3 text-white-50"></i>
+                            <h2 class="display-6 fw-bold mb-0 text-center" style="letter-spacing: 1px;">จองคิวช่างด่วน</h2>
+                            <p class="mt-3 text-white-50 text-center"><i class="fa-solid fa-bolt me-1"></i> สะดวกรวดเร็ว บริการทันใจ</p>
                         </div>
-                        <h3 class="service-title">ซ่อมแอร์</h3>
-                        <p class="service-price">ประเมินหน้างาน</p>
                     </div>
                 </div>
-                <!-- Service 3 -->
-                <div class="col-6 col-md-3">
-                    <div class="service-card" onclick="alert('จองคิว: บริการติดตั้งแอร์')">
-                        <div class="service-icon">
-                            <i class="fa-solid fa-hammer"></i>
-                        </div>
-                        <h3 class="service-title">ติดตั้งแอร์</h3>
-                        <p class="service-price">เริ่มต้น 2,500.-</p>
-                    </div>
-                </div>
-                <!-- Service 4 -->
-                <div class="col-6 col-md-3">
-                    <div class="service-card" onclick="alert('จองคิว: ถอด/ย้ายแอร์')">
-                        <div class="service-icon">
-                            <i class="fa-solid fa-truck-fast"></i>
-                        </div>
-                        <h3 class="service-title">ถอด / ย้ายแอร์</h3>
-                        <p class="service-price">เริ่มต้น 1,500.-</p>
-                    </div>
-                </div>
+
             </div>
         </div>
     </section>
