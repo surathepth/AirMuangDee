@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครเป็นช่าง - เมืองแอร์ดี</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .register-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-top: -30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bg">
+        <h2><i class="fa-solid fa-wrench me-2"></i>สมัครเป็นช่างประจำพื้นที่</h2>
+        <p class="mb-0">ร่วมเป็นพาร์ทเนอร์กับร้านเมืองแอร์ดี รับงานง่ายๆ ผ่านระบบ</p>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card register-card">
+                    <div class="card-body p-4">
+                        <h4 class="card-title text-center mb-4 text-primary">ข้อมูลส่วนตัวช่าง</h4>
+                        <form id="techRegisterForm">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">ชื่อ-นามสกุล <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="techName" required>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">เบอร์โทรศัพท์ <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="techPhone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">ไอดีไลน์ (ID Line)</label>
+                                    <input type="text" class="form-control" id="techLineId">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">ที่อยู่ / ศูนย์ประจำการ (หน้างานหลัก) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control mb-2" id="tech_addr_house" placeholder="บ้านเลขที่ หมู่บ้าน ซอย ถนน" required>
+                                <div class="row g-2 mb-2">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="tech_addr_subdistrict" placeholder="ตำบล/แขวง" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="tech_addr_district" placeholder="อำเภอ/เขต" required>
+                                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="tech_addr_province" placeholder="จังหวัด" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="tel" class="form-control" id="tech_addr_zipcode" placeholder="รหัสไปรษณีย์" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-map-location-dot me-2"></i>พิกัดบ้าน / ศูนย์ประจำการ</h5>
+                            <p class="text-muted small">เพื่อใช้คำนวณระยะทางและรับงานที่อยู่ใกล้เคียง</p>
+                            
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-outline-primary w-100 mb-3" id="btnGetTechLocation">
+                                    <i class="fa-solid fa-location-crosshairs me-2"></i>ดึงพิกัดตำแหน่งปัจจุบันของฉัน
+                                </button>
+                                <div id="map" style="height: 300px; border-radius: 8px; border: 1px solid #ced4da; display: none;"></div>
+                                <input type="hidden" id="tech_lat">
+                                <input type="hidden" id="tech_lng">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 mt-3 fw-bold fs-5">
+                                <i class="fa-solid fa-paper-plane me-2"></i>ส่งข้อมูลสมัคร
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
+            authDomain: "muangairdee-62b3e.firebaseapp.com",
+            projectId: "muangairdee-62b3e",
+            storageBucket: "muangairdee-62b3e.firebasestorage.app",
+            messagingSenderId: "278310934572",
+            appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('techRegisterForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const lat = document.getElementById('tech_lat').value;
+            const lng = document.getElementById('tech_lng').value;
+
+            if(!lat || !lng) {
+                alert('กรุณากดปุ่ม ดึงพิกัดตำแหน่งปัจจุบันของคุณ เพื่อให้ระบบบันทึกฐานข้อมูลแผนที่');
+                return;
+            }
+
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังส่งข้อมูล...';
+
+            try {
+                // รวมที่อยู่ให้เป็นข้อความเดียวแบบเดียวกับลูกค้า
+                const h = document.getElementById('tech_addr_house').value;
+                const sd = document.getElementById('tech_addr_subdistrict').value;
+                const d = document.getElementById('tech_addr_district').value;
+                const p = document.getElementById('tech_addr_province').value;
+                const z = document.getElementById('tech_addr_zipcode').value;
+                const fullAddress = `${h} ต.${sd} อ.${d} จ.${p} ${z}`;
+
+                await addDoc(collection(db, "technicians"), {
+                    techName: document.getElementById('techName').value,
+                    techPhone: document.getElementById('techPhone').value,
+                    techLineId: document.getElementById('techLineId').value,
+                    techArea: fullAddress,
+                    baseLocation: { lat: parseFloat(lat), lng: parseFloat(lng) },
+                    status: "รออนุมัติ",
+                    currentStatus: "Offline", // Online/Offline (พร้อมรับงานหรือไม่)
+                    createdAt: serverTimestamp()
+                });
+                
+                alert('ส่งข้อมูลสมัครช่างสำเร็จ! รอแอดมินอนุมัติการเข้าสู่ระบบ');
+                e.target.reset();
+                document.getElementById('map').style.display = 'none';
+                
+            } catch(error) {
+                console.error(error);
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+    </script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script>
+        let map, marker;
+        const btnGetLocation = document.getElementById('btnGetTechLocation');
+        const mapDiv = document.getElementById('map');
+        const latInput = document.getElementById('tech_lat');
+        const lngInput = document.getElementById('tech_lng');
+
+        btnGetLocation.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                btnGetLocation.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังค้นหา...';
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    latInput.value = lat;
+                    lngInput.value = lng;
+                    
+                    mapDiv.style.display = 'block';
+                    
+                    if(!map) {
+                        map = L.map('map').setView([lat, lng], 15);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '© OpenStreetMap'
+                        }).addTo(map);
+                        marker = L.marker([lat, lng], {draggable: true}).addTo(map);
+                        
+                        marker.on('dragend', function(e) {
+                            const pos = marker.getLatLng();
+                            latInput.value = pos.lat;
+                            lngInput.value = pos.lng;
+                        });
+                    } else {
+                        map.setView([lat, lng], 15);
+                        marker.setLatLng([lat, lng]);
+                    }
+                    
+                    setTimeout(() => map.invalidateSize(), 100);
+
+                    btnGetLocation.innerHTML = '<i class="fa-solid fa-check text-success me-2"></i>ดึงพิกัดสำเร็จ (เลื่อนหมุดได้)';
+                    btnGetLocation.classList.replace('btn-outline-primary', 'btn-light');
+                    btnGetLocation.classList.add('border-success', 'text-success');
+                }, function(error) {
+                    alert('ไม่สามารถดึงพิกัดได้ กรุณาเปิด GPS/อนุญาต Location');
+                    btnGetLocation.innerHTML = '<i class="fa-solid fa-location-crosshairs me-2"></i>ดึงพิกัดตำแหน่งปัจจุบันของฉัน';
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("เบราว์เซอร์ของคุณไม่รองรับระบบพิกัด GPS");
+            }
+        });
+    </script>
+</body>
+</html>
