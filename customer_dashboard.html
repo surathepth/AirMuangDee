@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบลูกค้า - เมืองแอร์ดี</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-card { background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 450px; text-align: center; }
+        .icon-circle { width: 80px; height: 80px; background-color: #ff7a45; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; margin: 0 auto 20px auto; }
+        .form-control-custom { border-radius: 8px; padding: 12px 15px; border: 1px solid #dee2e6; }
+        .form-control-custom:focus { border-color: #ff7a45; box-shadow: 0 0 0 0.25rem rgba(255, 122, 69, 0.25); }
+        .btn-orange { background: linear-gradient(135deg, #ff7a45, #ff512f); color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: 500; transition: transform 0.2s; }
+        .btn-orange:hover { transform: translateY(-2px); color: white; box-shadow: 0 5px 15px rgba(255, 122, 69, 0.3); }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="icon-circle">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        <h3 class="fw-bold mb-4" style="color: #2b3a4a;">เข้าสู่ระบบลูกค้า</h3>
+        
+        <form id="customerLoginForm">
+            <div class="mb-3 text-start">
+                <label class="form-label fw-bold text-muted small">เบอร์โทรศัพท์ที่ลงทะเบียนไว้</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-phone text-muted"></i></span>
+                    <input type="tel" class="form-control form-control-custom" id="customerPhone" placeholder="08X-XXX-XXXX" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-orange w-100 mt-3 mb-3 fs-5">เข้าสู่ระบบ</button>
+            
+            <div class="mt-4 pt-3 border-top">
+                <p class="text-muted small mb-0">ยังไม่ได้ลงทะเบียน? <a href="#" class="text-primary fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#registerModal">สมัครสมาชิกลูกค้าใหม่คลิกที่นี่</a></p>
+                <div class="mt-3">
+                    <a href="index.html" class="text-muted small text-decoration-none"><i class="fa-solid fa-arrow-left me-1"></i> กลับหน้าหลัก</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Customer Dashboard Section (Hidden by default) -->
+    <div class="container py-5" id="customerDashboardSection" style="display: none; max-width: 800px; width: 100%;">
+        
+        <!-- Header & Profile -->
+        <div class="card shadow-lg border-0 rounded-4 mb-4" style="overflow: hidden;">
+            <div class="bg-primary text-white p-4" style="background: linear-gradient(135deg, #2b3a4a, #1a252f) !important;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="fw-bold mb-0"><i class="fa-solid fa-crown text-warning me-2"></i> ระบบสมาชิกลูกค้า</h3>
+                    <button class="btn btn-outline-light btn-sm rounded-pill px-3" id="btnLogoutCustomer"><i class="fa-solid fa-right-from-bracket me-1"></i> ออกจากระบบ</button>
+                </div>
+            </div>
+            <div class="card-body p-4 bg-white">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">ชื่อ-นามสกุล</p>
+                        <h6 class="fw-bold" id="dashName">-</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">เบอร์โทรศัพท์</p>
+                        <h6 class="fw-bold" id="dashPhone">-</h6>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted small mb-1">ที่อยู่สำหรับการเรียกช่าง</p>
+                        <h6 class="fw-bold mb-0" id="dashAddress">-</h6>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <div class="text-center">
+                    <a href="index.html" class="btn btn-orange px-5 py-2 rounded-pill fs-5"><i class="fa-solid fa-plus-circle me-2"></i> จองคิวเรียกช่างใหม่</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking History -->
+        <h5 class="fw-bold mb-3 px-2" style="color: #2b3a4a;"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i> ประวัติการเรียกช่างของฉัน</h5>
+        <div id="bookingHistoryList">
+            <div class="text-center text-muted py-5 bg-white rounded-4 shadow-sm border-0">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p>กำลังโหลดข้อมูลประวัติของคุณ...</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    
+    <!-- Registration Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="registerModalLabel" style="color: #2b3a4a;">สมัครสมาชิกลูกค้าใหม่</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-2">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ชื่อ-นามสกุล</label>
+                            <input type="text" class="form-control form-control-custom" id="regName" placeholder="เช่น นายเมืองดี รักแอร์" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">เบอร์โทรศัพท์ (ใช้เป็นรหัสผ่านเข้าสู่ระบบ)</label>
+                            <input type="tel" class="form-control form-control-custom" id="regPhone" placeholder="08X-XXX-XXXX" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ที่อยู่ (สำหรับการเรียกช่าง)</label>
+                            <textarea class="form-control form-control-custom" id="regAddress" rows="3" placeholder="บ้านเลขที่, หมู่บ้าน, ถนน, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-orange w-100" id="btnRegisterSubmit">บันทึกข้อมูลสมัครสมาชิก</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper (Required for Modals) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    
+    <script>
+        // 1. Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
+            authDomain: "muangairdee-62b3e.firebaseapp.com",
+            projectId: "muangairdee-62b3e",
+            storageBucket: "muangairdee-62b3e.firebasestorage.app",
+            messagingSenderId: "278310934572",
+            appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // UI Elements
+        const loginCard = document.querySelector('.login-card');
+        const dashboardSection = document.getElementById('customerDashboardSection');
+
+        // UI Control Functions
+        function showDashboard(name, phone, address) {
+            loginCard.style.display = 'none';
+            document.body.style.alignItems = 'flex-start';
+            document.body.style.paddingTop = '2rem';
+            dashboardSection.style.display = 'block';
+            
+            document.getElementById('dashName').innerText = name;
+            document.getElementById('dashPhone').innerText = phone;
+            document.getElementById('dashAddress').innerText = address || '-';
+            
+            loadBookingHistory(phone);
+        }
+
+        document.getElementById('btnLogoutCustomer').addEventListener('click', function() {
+            localStorage.removeItem('customerPhone');
+            localStorage.removeItem('customerName');
+            localStorage.removeItem('customerAddress');
+            location.reload();
+        });
+
+        if(localStorage.getItem('customerPhone')) {
+            showDashboard(localStorage.getItem('customerName'), localStorage.getItem('customerPhone'), localStorage.getItem('customerAddress'));
+        }
+
+        // Login Logic
+        document.getElementById("customerLoginForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const phone = document.getElementById("customerPhone").value.trim();
+            const btn = e.target.querySelector('button[type="submit"]');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังตรวจสอบ...';
+            btn.disabled = true;
+
+            try {
+                const querySnapshot = await db.collection("customers").where("phone", "==", phone).get();
+                if (querySnapshot.empty) {
+                    alert("ไม่พบข้อมูลเบอร์โทรศัพท์นี้ กรุณาสมัครสมาชิกใหม่ก่อนค่ะ");
+                } else {
+                    const customerData = querySnapshot.docs[0].data();
+                    localStorage.setItem('customerPhone', customerData.phone);
+                    localStorage.setItem('customerName', customerData.name);
+                    localStorage.setItem('customerAddress', customerData.address || '');
+                    
+                    showDashboard(customerData.name, customerData.phone, customerData.address);
+                }
+            } catch (error) {
+                console.error("Login Error:", error);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อระบบ");
+            } finally {
+                btn.innerHTML = 'เข้าสู่ระบบ';
+                btn.disabled = false;
+            }
+        });
+
+        // Registration Logic
+        document.getElementById("registerForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const name = document.getElementById("regName").value.trim();
+            const phone = document.getElementById("regPhone").value.trim();
+            const address = document.getElementById("regAddress").value.trim();
+            const btn = document.getElementById("btnRegisterSubmit");
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังบันทึก...';
+            btn.disabled = true;
+
+            try {
+                const checkSnapshot = await db.collection("customers").where("phone", "==", phone).get();
+                if (!checkSnapshot.empty) {
+                    alert("เบอร์โทรศัพท์นี้ถูกลงทะเบียนไว้แล้วค่ะ");
+                    btn.innerHTML = 'บันทึกข้อมูลสมัครสมาชิก';
+                    btn.disabled = false;
+                    return;
+                }
+
+                await db.collection("customers").add({
+                    name: name,
+                    phone: phone,
+                    address: address,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert("สมัครสมาชิกสำเร็จ! กำลังเข้าสู่ระบบอัตโนมัติ...");
+                
+                localStorage.setItem('customerPhone', phone);
+                localStorage.setItem('customerName', name);
+                localStorage.setItem('customerAddress', address);
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                if(modal) modal.hide();
+                
+                showDashboard(name, phone, address);
+
+            } catch (error) {
+                console.error("Register Error:", error);
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+                btn.innerHTML = 'บันทึกข้อมูลสมัครสมาชิก';
+                btn.disabled = false;
+            }
+        });
+
+        // Fetch Booking History Logic
+        function loadBookingHistory(phone) {
+            const listDiv = document.getElementById('bookingHistoryList');
+            
+            // Remove orderBy to prevent Firebase Composite Index Error
+            db.collection("bookings")
+              .where("customerPhone", "==", phone)
+              .onSnapshot((snapshot) => {
+                  listDiv.innerHTML = '';
+                  
+                  if (snapshot.empty) {
+                      listDiv.innerHTML = '<div class="text-center py-5 bg-white rounded-4 shadow-sm border-0"><i class="fa-solid fa-box-open fa-3x text-muted mb-3"></i><h5 class="text-muted">ยังไม่มีประวัติการเรียกช่างค่ะ</h5><a href="index.html" class="btn btn-sm btn-outline-primary mt-2">กดจองคิวแรกเลย!</a></div>';
+                      return;
+                  }
+
+                  // Sort documents in memory using JavaScript (New -> Old)
+                  let docsArray = [];
+                  snapshot.forEach((doc) => { docsArray.push(doc); });
+                  docsArray.sort((a, b) => {
+                      let dateA = a.data().createdAt ? a.data().createdAt.toMillis() : 0;
+                      let dateB = b.data().createdAt ? b.data().createdAt.toMillis() : 0;
+                      return dateB - dateA; // Descending
+                  });
+
+                  docsArray.forEach((doc) => {
+                      const data = doc.data();
+                      const dateObj = data.createdAt ? data.createdAt.toDate() : new Date();
+                      const dateStr = dateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                      
+                      let statusBadge = '';
+                      let icon = 'fa-clipboard-list';
+                      if (data.status === 'รอรับงาน') {
+                          statusBadge = '<span class="badge bg-warning text-dark px-3 py-2 rounded-pill"><i class="fa-solid fa-clock me-1"></i> กำลังหาช่าง</span>';
+                      } else if (data.status === 'รอชำระเงิน') {
+                          statusBadge = '<span class="badge bg-primary text-white px-3 py-2 rounded-pill"><i class="fa-solid fa-money-bill-wave me-1"></i> รอแอดมินรับชำระเงิน</span>';
+                          icon = 'fa-sack-dollar text-primary';
+                      } else if (data.status === 'รอชำระเงิน') {
+                          statusBadge = '<span class="badge bg-primary text-white px-3 py-2 rounded-pill"><i class="fa-solid fa-money-bill-wave me-1"></i> รอแอดมินรับชำระเงิน</span>';
+                          icon = 'fa-sack-dollar text-primary';
+                      } else if (data.status === 'กำลังดำเนินการ') {
+                          statusBadge = '<span class="badge bg-info text-dark px-3 py-2 rounded-pill"><i class="fa-solid fa-truck-fast me-1"></i> ช่างกำลังไปหา/กำลังซ่อม</span>';
+                          icon = 'fa-screwdriver-wrench text-info';
+                      } else if (data.status === 'เสร็จสิ้น') {
+                          statusBadge = '<span class="badge bg-success px-3 py-2 rounded-pill"><i class="fa-solid fa-check-circle me-1"></i> งานเสร็จสมบูรณ์</span>';
+                          icon = 'fa-check-circle text-success';
+                      } else {
+                          statusBadge = '<span class="badge bg-secondary px-3 py-2 rounded-pill">' + data.status + '</span>';
+                      }
+
+                      let paymentHtml = '';
+                      if (data.paymentAmount) {
+                          paymentHtml = '<div class="col-12 mt-2"><i class="fa-solid fa-file-invoice-dollar me-1 text-success"></i> <strong>ยอดชำระ:</strong> <span class="text-success fw-bold">' + data.paymentAmount + ' บาท</span> (' + data.paymentMethod + ')</div>';
+                      }
+
+                      const techName = data.technicianName || 'ยังไม่มีผู้รับงาน';
+
+                      const cardHtml = '<div class="card shadow-sm border-0 rounded-4 mb-3" style="transition: transform 0.2s;"><div class="card-body p-4"><div class="d-flex justify-content-between align-items-center mb-2"><h5 class="fw-bold mb-0 text-dark"><i class="fa-solid ' + icon + ' me-2"></i> ' + data.service + '</h5>' + statusBadge + '</div><hr class="text-muted my-2"><div class="row small text-muted"><div class="col-sm-6 mb-1"><i class="fa-solid fa-calendar-days me-1"></i> <strong>วันที่จอง:</strong> ' + dateStr + '</div><div class="col-sm-6 mb-1"><i class="fa-solid fa-user-gear me-1"></i> <strong>ช่างที่รับผิดชอบ:</strong> ' + techName + '</div>' + paymentHtml + '</div></div></div>';
+                      listDiv.innerHTML += cardHtml;
+                  });
+              }, (error) => {
+                  console.error("Error fetching history:", error);
+                  listDiv.innerHTML = '<div class="alert alert-danger text-center">เกิดข้อผิดพลาดในการโหลดประวัติ</div>';
+              });
+        }
+    </script>
+
+</body>
+</html>

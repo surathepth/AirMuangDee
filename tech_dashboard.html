@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -46,7 +46,10 @@
             <a class="navbar-brand fw-bold" href="#">
                 <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>ระบบรับงานช่าง
             </a>
-            <button class="btn btn-outline-light btn-sm" id="btnLogout" style="display:none;">
+            <button class="btn btn-warning btn-sm me-2 fw-bold shadow-sm" id="btnQrCode" data-bs-toggle="modal" data-bs-target="#qrModal" style="display:none;">
+                    <i class="fa-solid fa-qrcode me-1"></i>รับเงิน
+                </button>
+                <button class="btn btn-outline-light btn-sm" id="btnLogout" style="display:none;">
                 <i class="fa-solid fa-right-from-bracket me-1"></i>ออกจากระบบ
             </button>
         </div>
@@ -54,6 +57,88 @@
 
     <div class="container mt-4 mb-5">
         
+        
+    <!-- QR Code Modal -->
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title" id="qrModalLabel"><i class="fa-solid fa-qrcode me-2"></i>QR Code รับชำระเงิน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <p class="text-muted small mb-3">ให้ลูกค้าสแกนเพื่อชำระเงินเข้าบัญชีร้าน</p>
+                    <div class="bg-white p-2 rounded border d-inline-block shadow-sm">
+                        <!-- Use a generic PromptPay QR image or generic QR API. We will use a placeholder or generic promptpay generator here -->
+                        <img src="https://promptpay.io/0885324179.png" alt="QR Code" class="img-fluid" style="max-width: 200px;">
+                    </div>
+                    <h5 class="mt-3 mb-0 fw-bold text-success">ร้านเมืองแอร์ดี</h5>
+                    <p class="text-muted small mt-1 mb-0">เบอร์โทร/พร้อมเพย์: 088-5324179</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+    <!-- Payment Modal (Phase 5) -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title" id="paymentModalLabel"><i class="fa-solid fa-file-invoice-dollar me-2"></i>บันทึกการรับเงิน & ปิดจ๊อบ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="paymentForm">
+                        <input type="hidden" id="payJobId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ยอดเงินที่ได้รับ (บาท)</label>
+                            <input type="number" class="form-control form-control-lg text-end text-success fw-bold" id="payAmount" placeholder="0.00" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ช่องทางการชำระเงิน</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payMethod" id="payCash" value="เงินสด" checked>
+                                    <label class="form-check-label" for="payCash">
+                                        <i class="fa-solid fa-money-bill-wave text-success me-1"></i> เงินสด
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payMethod" id="payTransfer" value="เงินโอน">
+                                    <label class="form-check-label" for="payTransfer">
+                                        <i class="fa-solid fa-building-columns text-primary me-1"></i> โอนเงิน
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3" id="slipUploadDiv" style="display:none;">
+                            <label class="form-label fw-bold">แนบสลิปโอนเงิน</label>
+                            <input type="file" class="form-control" id="paySlipFile" accept="image/*">
+                            <div class="form-text text-muted small"><i class="fa-solid fa-circle-info me-1"></i>ใช้มือถือถ่ายรูปสลิปจากเครื่องลูกค้า หรืออัปโหลดไฟล์ภาพ</div>
+                            <!-- Image Preview -->
+                            <div class="text-center mt-2">
+                                <img id="slipPreview" src="" class="img-fluid rounded border" style="max-height: 200px; display:none;">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 justify-content-between bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-success fw-bold px-4" id="btnConfirmCompleteJob">
+                        <i class="fa-solid fa-check me-1"></i> ยืนยันปิดจ๊อบ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <!-- ================= LOGIN SECTION ================= -->
         <div class="row justify-content-center" id="loginSection">
             <div class="col-md-5">
@@ -400,22 +485,125 @@
             });
 
             // ผูก Event ให้ปุ่มปิดงาน
+            
+            // ===== PHASE 5: Payment & Complete Job Logic =====
+            
+            // 1. When Complete Job button clicked -> Change status to 'รอชำระเงิน'
             document.querySelectorAll('.btn-complete-job').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const jobId = e.target.closest('button').dataset.id;
-                    if(confirm("ยืนยันว่าทำงานนี้เสร็จสิ้นและเก็บเงินเรียบร้อยแล้วใช่หรือไม่?")) {
+                    if(confirm('ยืนยันส่งมอบงานให้แอดมินเก็บเงินใช่หรือไม่?')) {
                         try {
-                            await updateDoc(doc(db, "bookings", jobId), {
-                                status: "เสร็จสมบูรณ์"
+                            btn.disabled = true;
+                            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังประมวลผล...';
+                            const jobRef = doc(db, "bookings", jobId);
+                            await updateDoc(jobRef, {
+                                status: "รอชำระเงิน",
+                                completedAt: new Date()
                             });
-                            alert("ปิดงานสำเร็จ! งานนี้จะถูกย้ายออกจากกล่องรับงานของคุณ");
-                        } catch(err) {
-                            console.error(err);
-                            alert("เกิดข้อผิดพลาดในการปิดงาน");
+                            alert('ส่งมอบงานเรียบร้อยแล้ว');
+                            loadAssignedJobs();
+                        } catch (error) {
+                            console.error("Error updating status:", error);
+                            alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+                            btn.disabled = false;
                         }
                     }
                 });
             });
+            
+            // 2. Toggle Slip Upload based on Payment Method
+            document.querySelectorAll('input[name="payMethod"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if(e.target.value === 'เงินโอน') {
+                        document.getElementById('slipUploadDiv').style.display = 'block';
+                    } else {
+                        document.getElementById('slipUploadDiv').style.display = 'none';
+                    }
+                });
+            });
+            
+            // 3. Preview Image before upload
+            document.getElementById('paySlipFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('slipPreview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // 4. Confirm Complete Job and Update Firebase
+            document.getElementById('btnConfirmCompleteJob').addEventListener('click', async () => {
+                const jobId = document.getElementById('payJobId').value;
+                const payAmount = document.getElementById('payAmount').value;
+                const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+                const slipFile = document.getElementById('paySlipFile').files[0];
+                
+                if(!payAmount || payAmount <= 0) {
+                    alert("กรุณากรอกยอดเงินให้ถูกต้อง");
+                    return;
+                }
+                
+                if(payMethod === 'เงินโอน' && !slipFile) {
+                    alert("กรุณาแนบสลิปโอนเงิน");
+                    return;
+                }
+
+                // Show loading state
+                const btnConfirm = document.getElementById('btnConfirmCompleteJob');
+                const originalBtnHtml = btnConfirm.innerHTML;
+                btnConfirm.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> กำลังบันทึก...';
+                btnConfirm.disabled = true;
+                
+                try {
+                    let slipUrl = null;
+                    
+                    // If transfer, read image as base64 string to store directly in document (simple approach for now without setting up full Firebase Storage)
+                    if(payMethod === 'เงินโอน' && slipFile) {
+                        const toBase64 = file => new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onload = () => resolve(reader.result);
+                            reader.onerror = error => reject(error);
+                        });
+                        slipUrl = await toBase64(slipFile);
+                    }
+                
+                    // Prepare data to update
+                    const updateData = {
+                        status: "เสร็จสิ้น",
+                        paymentAmount: parseFloat(payAmount),
+                        paymentMethod: payMethod,
+                        completedAt: serverTimestamp() // Add completion timestamp
+                    };
+                    
+                    if(slipUrl) {
+                        updateData.paymentSlipBase64 = slipUrl; // Save image data
+                    }
+                
+                    await updateDoc(doc(db, "bookings", jobId), updateData);
+                    
+                    // Close modal and alert
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                    modal.hide();
+                    
+                    alert("บันทึกการรับเงินและปิดงานสำเร็จ!");
+                    
+                } catch(err) {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาดในการบันทึก: " + err.message);
+                } finally {
+                    btnConfirm.innerHTML = originalBtnHtml;
+                    btnConfirm.disabled = false;
+                }
+            });
+            // ==================================================
+
         }
     </script>
 </body>

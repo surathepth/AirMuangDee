@@ -35,6 +35,9 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link fw-bold text-primary" id="techs-tab" data-bs-toggle="tab" data-bs-target="#techs-panel" type="button" role="tab"><i class="fa-solid fa-users-gear me-2"></i>จัดการทีมช่าง</button>
             </li>
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link fw-bold text-info" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports-panel" type="button" role="tab" onclick="loadReports()"><i class="fa-solid fa-chart-line me-2"></i>รายงานสรุปยอด</button>
+              </li>
         </ul>
         <div class="tab-content" id="adminTabsContent">
             <!-- ================= BOOKINGS TAB ================= -->
@@ -78,7 +81,100 @@
                 </div>
             </div> <!-- End Bookings Tab -->
 
-            <!-- ================= TECHS TAB ================= -->
+            
+              <!-- ================= REPORTS TAB (Phase 5) ================= -->
+              <div class="tab-pane fade" id="reports-panel" role="tabpanel">
+                  <!-- Summary Cards -->
+                  <div class="row mb-4 g-3">
+                      <!-- Total Income (New Card) -->
+                      <div class="col-md-12">
+                          <div class="card border-0 shadow-sm rounded-4" style="background: linear-gradient(135deg, #ff7e5f, #feb47b); color: white;">
+                              <div class="card-body d-flex align-items-center p-4">
+                                  <div class="rounded-circle bg-white text-danger d-flex align-items-center justify-content-center me-4 shadow" style="width:70px; height:70px; font-size: 30px;">
+                                      <i class="fa-solid fa-sack-dollar"></i>
+                                  </div>
+                                  <div>
+                                      <h5 class="mb-1 text-white-50 fw-bold">ยอดรายรับสุทธิ (รวมทั้งหมด)</h5>
+                                      <h2 class="mb-0 fw-bold" id="totalAllIncome">0 บาท</h2>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="card bg-success text-white border-0 shadow-sm h-100 rounded-4">
+                              <div class="card-body d-flex align-items-center">
+                                  <div class="rounded-circle bg-white text-success d-flex align-items-center justify-content-center me-3" style="width:60px; height:60px; font-size: 24px;">
+                                      <i class="fa-solid fa-money-bill-wave"></i>
+                                  </div>
+                                  <div>
+                                      <h6 class="mb-1 text-white-50 fw-bold">ยอดเงินสดรวม</h6>
+                                      <h3 class="mb-0 fw-bold" id="totalCash">0 ฿</h3>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="card bg-primary text-white border-0 shadow-sm h-100 rounded-4">
+                              <div class="card-body d-flex align-items-center">
+                                  <div class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center me-3" style="width:60px; height:60px; font-size: 24px;">
+                                      <i class="fa-solid fa-building-columns"></i>
+                                  </div>
+                                  <div>
+                                      <h6 class="mb-1 text-white-50 fw-bold">ยอดเงินโอนรวม</h6>
+                                      <h3 class="mb-0 fw-bold" id="totalTransfer">0 ฿</h3>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="card border-0 shadow-sm rounded-4 mb-4">
+                      <div class="card-header bg-white py-3 border-bottom-0">
+                          <div class="row g-3 align-items-center">
+                              <div class="col-md-4">
+                                  <h5 class="mb-0 fw-bold text-info"><i class="fa-solid fa-filter me-2"></i>ค้นหาและตัวกรอง</h5>
+                              </div>
+                              <div class="col-md-5">
+                                  <div class="input-group">
+                                      <span class="input-group-text bg-light border-0 text-muted">จาก</span>
+                                      <input type="date" class="form-control bg-light border-0" id="filterDateStart" onchange="loadReports()">
+                                      <span class="input-group-text bg-light border-0 text-muted">ถึง</span>
+                                      <input type="date" class="form-control bg-light border-0" id="filterDateEnd" onchange="loadReports()">
+                                  </div>
+                              </div>
+                              <div class="col-md-3">
+                                  <div class="input-group">
+                                      <span class="input-group-text bg-light border-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                      <input type="text" class="form-control bg-light border-0" id="filterText" placeholder="ค้นหาชื่อช่าง, เบอร์ช่าง..." onkeyup="filterReportTable()">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-body p-0">
+                          <div class="table-responsive">
+                              <table class="table table-hover align-middle mb-0" id="reportTable">
+                                  <thead class="table-light text-muted">
+                                      <tr>
+                                          <th class="ps-4">วันที่/เวลาปิดงาน</th>
+                                          <th>ข้อมูลช่าง</th>
+                                          <th>ข้อมูลลูกค้า</th>
+                                          <th>รายละเอียดงาน</th>
+                                          <th>ยอดเงิน</th>
+                                          <th>ช่องทาง</th>
+                                          <th class="text-center pe-4">หลักฐาน</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody id="reportsTableBody">
+                                      <!-- Report data will be loaded here -->
+                                      <tr><td colspan="7" class="text-center py-4 text-muted">กำลังโหลดข้อมูลรายงาน...</td></tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+<!-- ================= TECHS TAB ================= -->
             <div class="tab-pane fade" id="techs-panel" role="tabpanel">
                 <div class="row">
                     <div class="col-12">
@@ -145,13 +241,253 @@
             </div>
         </div>
     </div>
-﻿    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+﻿    
+    <!-- View Slip Modal -->
+    <div class="modal fade" id="viewSlipModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white border-0">
+                    <h5 class="modal-title"><i class="fa-solid fa-image me-2"></i>หลักฐานการโอนเงิน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center p-0 bg-light">
+                    <img id="slipImageFull" src="" class="img-fluid" style="max-height: 70vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Payment & Complete Job Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title" id="paymentModalLabel"><i class="fa-solid fa-file-invoice-dollar me-2"></i>รับชำระเงิน & ปิดจ๊อบ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-info py-2 mb-3">
+                        <small><strong>ลูกค้า:</strong> <span id="payCustomerName"></span></small><br>
+                        <small><strong>บริการ:</strong> <span id="payService"></span></small>
+                    </div>
+                    <form id="paymentForm">
+                        <input type="hidden" id="payJobId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ยอดเงินที่เรียกเก็บ (บาท)</label>
+                            <input type="number" class="form-control form-control-lg text-end text-success fw-bold" id="payAmount" placeholder="0.00" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ช่องทางการชำระเงิน</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payMethod" id="payCash" value="เงินสด" checked>
+                                    <label class="form-check-label" for="payCash">
+                                        <i class="fa-solid fa-money-bill-wave text-success me-1"></i> เงินสด
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payMethod" id="payTransfer" value="โอนเงิน">
+                                    <label class="form-check-label" for="payTransfer">
+                                        <i class="fa-solid fa-building-columns text-primary me-1"></i> โอนเงิน
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3" id="slipUploadDiv" style="display:none;">
+                            <label class="form-label fw-bold">แนบรูปสลิปโอนเงิน</label>
+                            <input type="file" class="form-control" id="slipFile" accept="image/*">
+                            <div class="mt-2 text-center">
+                                <img id="slipPreview" src="" alt="Slip Preview" class="img-fluid rounded shadow-sm" style="max-height: 200px; display:none;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 mt-3 rounded-pill" id="btnSubmitPayment">
+                            <i class="fa-solid fa-check-circle me-1"></i> ยืนยันชำระเงิน & ส่งมอบงาน
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+        // ================= PHASE 5: REPORT FUNCTIONS =================
+        let allReportData = []; // Store to allow local filtering
+        
+        async function loadReports() {
+            const tbody = document.getElementById('reportsTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4"><div class="spinner-border text-info spinner-border-sm me-2"></div>กำลังโหลดข้อมูล...</td></tr>';
+            
+            
+            try {
+                const filterDateStartElem = document.getElementById('filterDateStart');
+                const filterDateEndElem = document.getElementById('filterDateEnd');
+                const filterDateStartStr = filterDateStartElem ? filterDateStartElem.value : '';
+                const filterDateEndStr = filterDateEndElem ? filterDateEndElem.value : '';
+        
+                // Query only completed jobs
+                const q = query(collection(db, "bookings"), where("status", "==", "เสร็จสิ้น"));
+                const querySnapshot = await getDocs(q);
+                
+                allReportData = [];
+                let totalCash = 0;
+            let totalTransfer = 0;
+            let totalAll = 0;
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    allReportData.push(data);
+                });
+                
+                // Sort by completedAt descending (newest first)
+                allReportData.sort((a, b) => {
+                    const dateA = a.completedAt ? a.completedAt.toMillis() : 0;
+                    const dateB = b.completedAt ? b.completedAt.toMillis() : 0;
+                    return dateB - dateA;
+                });
+                
+                // Render table
+                renderReportTable(filterDateStartStr, filterDateEndStr);
+                
+            } catch (error) {
+                console.error("Error loading reports:", error);
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Error: ${error.message}</td></tr>`;
+            }</td></tr>`;
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+            }
+        }
+        
+        function renderReportTable(filterDateStartStr, filterDateEndStr) {
+            const tbody = document.getElementById('reportsTableBody');
+            tbody.innerHTML = '';
+            
+            let totalCash = 0;
+            let totalTransfer = 0;
+            let totalAll = 0;
+            
+            let filteredData = allReportData;
+            
+            if(filterDateStartStr || filterDateEndStr) {
+                filteredData = allReportData.filter(job => {
+                    if(!job.completedAt) return false;
+                    const jobDate = job.completedAt.toDate();
+                    const jobDateOnly = new Date(jobDate.getFullYear(), jobDate.getMonth(), jobDate.getDate()).getTime();
+                    
+                    let passStart = true;
+                    if (filterDateStartStr) {
+                        const s = new Date(filterDateStartStr);
+                        const startOnly = new Date(s.getFullYear(), s.getMonth(), s.getDate()).getTime();
+                        passStart = jobDateOnly >= startOnly;
+                    }
+                    
+                    let passEnd = true;
+                    if (filterDateEndStr) {
+                        const e = new Date(filterDateEndStr);
+                        const endOnly = new Date(e.getFullYear(), e.getMonth(), e.getDate()).getTime();
+                        passEnd = jobDateOnly <= endOnly;
+                    }
+                    
+                    return passStart && passEnd;
+                });
+            }
+            
+            if(filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><i class="fa-solid fa-folder-open fa-2x mb-3 d-block"></i>ไม่พบข้อมูลรายงานในวันดังกล่าว</td></tr>';
+                document.getElementById('totalCash').innerText = '0 บาท';
+                document.getElementById('totalTransfer').innerText = '0 บาท';
+                if(document.getElementById('totalAllIncome')) document.getElementById('totalAllIncome').innerText = '0 บาท';
+                return;
+            }
+            
+            filteredData.forEach(job => {
+                let dateStr = "ไม่ระบุเวลา";
+                if(job.completedAt) {
+                    const d = job.completedAt.toDate();
+                    dateStr = d.toLocaleDateString('th-TH') + ' ' + d.toLocaleTimeString('th-TH').substring(0,5);
+                }
+                
+                const amount = job.paymentAmount || 0;
+                const method = job.paymentMethod || "ไม่ระบุ";
+                
+                if(method === 'เงินสด') {
+                    totalCash += amount;
+                } else if(method === 'โอนเงิน') {
+                    totalTransfer += amount;
+                }
+                totalAll += amount;
+                
+                let methodBadge = '';
+                if(method === 'เงินสด') {
+                    methodBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="fa-solid fa-money-bill-wave me-1"></i>เงินสด</span>';
+                } else if (method === 'โอนเงิน') {
+                    methodBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1"><i class="fa-solid fa-building-columns me-1"></i>โอนเงิน</span>';
+                } else {
+                    methodBadge = '<span class="badge bg-secondary">ไม่ระบุ</span>';
+                }
+                
+                let slipBtn = '-';
+                if(job.paymentSlipBase64) {
+                    slipBtn = '<button class="btn btn-sm btn-outline-primary" onclick="viewSlip(\'' + job.id + '\')"><i class="fa-solid fa-image"></i> ดูสลิป</button>' +
+                              '<input type="hidden" id="slip_data_' + job.id + '" value="' + job.paymentSlipBase64 + '">';
+                }
+                
+                let trHtml = '<td class="ps-4 text-muted small"><i class="fa-regular fa-clock me-1"></i>' + dateStr + '</td>' +
+                             '<td><div class="fw-bold text-dark search-tech-name">' + (job.techName || '-') + '</div><div class="small text-muted search-tech-phone"><i class="fa-solid fa-phone me-1"></i>' + (job.techPhone || '-') + '</div></td>' +
+                             '<td><div class="fw-bold text-dark">' + (job.customerName || '-') + '</div><div class="small text-muted"><i class="fa-solid fa-phone me-1"></i>' + (job.customerPhone || '-') + '</div></td>' +
+                             '<td><div class="badge bg-info text-dark mb-1">' + (job.service || job.serviceType || '-') + '</div><div class="small text-muted text-truncate" style="max-width: 150px;">' + (job.serviceDetails || job.details || '-') + '</div></td>' +
+                             '<td class="fw-bold text-success text-end">' + amount.toLocaleString() + ' ฿</td>' +
+                             '<td class="text-center">' + methodBadge + '</td>' +
+                             '<td class="text-center pe-4">' + slipBtn + '</td>';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = trHtml;
+                tbody.appendChild(tr);
+            });
+            
+            document.getElementById('totalCash').innerText = totalCash.toLocaleString() + ' บาท';
+            document.getElementById('totalTransfer').innerText = totalTransfer.toLocaleString() + ' บาท';
+            if(document.getElementById('totalAllIncome')) document.getElementById('totalAllIncome').innerText = totalAll.toLocaleString() + ' บาท';
+        }
+        
+        // Search filter function
+        window.filterReportTable = function() {
+            const searchText = document.getElementById('filterText').value.toLowerCase();
+            const rows = document.getElementById('reportsTableBody').getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                // Skip the "no data" row if present
+                if(rows[i].cells.length === 1) continue; 
+                
+                const techName = rows[i].querySelector('.search-tech-name').innerText.toLowerCase();
+                const techPhone = rows[i].querySelector('.search-tech-phone').innerText.toLowerCase();
+                
+                if (techName.includes(searchText) || techPhone.includes(searchText)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+        
+        window.viewSlip = function(jobId) {
+            const base64Data = document.getElementById('slip_data_' + jobId).value;
+            document.getElementById('slipImageFull').src = base64Data;
+            const modal = new bootstrap.Modal(document.getElementById('viewSlipModal'));
+            modal.show();
+        }
+        // =============================================================
+
+    </script>
     
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
@@ -165,7 +501,10 @@
         const db = getFirestore(app);
         
         window.dbObj = db;
+        window.dbObj = db;
         window.getDocObj = getDoc;
+        window.docObj = doc;
+        window.updateDocObj = updateDoc;
 
         const tableBody = document.getElementById('bookingsTableBody');
 
@@ -198,6 +537,8 @@
                         actionBtn = '<button class="btn btn-sm btn-secondary" disabled><i class="fa-solid fa-check"></i> เสร็จแล้ว</button>';
                     } else if (data.status === "จ่ายงานแล้ว") {
                         actionBtn = '<button class="btn btn-sm btn-primary" onclick="window.printJobOrder(\'' + docId + '\', \'' + data.assignedTechId + '\')"><i class="fa-solid fa-print me-1"></i>🖨️ พิมพ์ใบสั่งงาน</button>';
+                    } else if (data.status === "รอชำระเงิน") {
+                        actionBtn = '<button class="btn btn-sm btn-success" onclick="window.openPaymentModal(\'' + docId + '\', \'' + data.customerName + '\', \'' + data.serviceType + '\')"><i class="fa-solid fa-money-bill-wave me-1"></i>ชำระเงิน/ส่งมอบ</button>';
                     } else {
                         let lat = data.location ? data.location.lat : 'null';
                         let lng = data.location ? data.location.lng : 'null';
@@ -506,6 +847,109 @@
         window.fetchTechnicians();
 
         fetchBookings();
+        // ================= PHASE 6: PAYMENT LOGIC =================
+        window.openPaymentModal = function(jobId, cusName, serviceType) {
+            document.getElementById('payJobId').value = jobId;
+            document.getElementById('payCustomerName').innerText = cusName || '-';
+            document.getElementById('payService').innerText = serviceType || '-';
+            
+            // Reset form
+            document.getElementById('paymentForm').reset();
+            document.getElementById('slipUploadDiv').style.display = 'none';
+            document.getElementById('slipPreview').style.display = 'none';
+            document.getElementById('slipPreview').src = '';
+            
+            const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            modal.show();
+        };
+
+        // Toggle slip based on payment method
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            body.addEventListener('change', (e) => {
+                if(e.target.name === 'payMethod') {
+                    if(e.target.value === 'โอนเงิน') {
+                        document.getElementById('slipUploadDiv').style.display = 'block';
+                    } else {
+                        document.getElementById('slipUploadDiv').style.display = 'none';
+                    }
+                }
+            });
+            
+            body.addEventListener('change', (e) => {
+                if(e.target.id === 'slipFile') {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            const img = document.getElementById('slipPreview');
+                            img.src = evt.target.result;
+                            img.style.display = 'inline-block';
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+            
+            // Submit Payment
+            const payForm = document.getElementById('paymentForm');
+            if(payForm) {
+                payForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const btn = document.getElementById('btnSubmitPayment');
+                    const jobId = document.getElementById('payJobId').value;
+                    const amount = parseFloat(document.getElementById('payAmount').value);
+                    const method = document.querySelector('input[name="payMethod"]:checked').value;
+                    let slipBase64 = "";
+                    
+                    if (method === "โอนเงิน") {
+                        const fileInput = document.getElementById('slipFile');
+                        if (fileInput.files.length === 0) {
+                            alert("กรุณาแนบรูปสลิปการโอนเงิน");
+                            return;
+                        }
+                        slipBase64 = document.getElementById('slipPreview').src;
+                    }
+                    
+                    try {
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังบันทึก...';
+                        
+                        const jobRef = window.docObj(window.dbObj, "bookings", jobId);
+                        
+                        let updateData = {
+                            status: "เสร็จสิ้น",
+                            paymentAmount: amount,
+                            paymentMethod: method,
+                            completedAt: new Date()
+                        };
+                        
+                        if (slipBase64) {
+                            updateData.paymentSlipBase64 = slipBase64;
+                        }
+                        
+                        await window.updateDocObj(jobRef, updateData);
+                        
+                        alert("บันทึกการชำระเงินและส่งมอบงานเรียบร้อยแล้ว!");
+                        bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+                        
+                        // Refresh bookings table and reports
+                        if(window.fetchBookings) window.fetchBookings();
+                        if(window.loadReports) window.loadReports();
+                        
+                    } catch(error) {
+                        console.error("Error updating payment:", error);
+                        alert("เกิดข้อผิดพลาด: " + error.message);
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> ยืนยันชำระเงิน & ส่งมอบงาน';
+                    }
+                });
+            }
+        });
+        // ==============================================================
+
     </script>
 </body>
 </html>
