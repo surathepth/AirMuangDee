@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -11,46 +11,21 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #f4f6f9;
-        }
-        .admin-header {
-            background-color: #28a745;
-            color: white;
-            padding: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .table th {
-            background-color: #e9ecef;
-            font-weight: 600;
-        }
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            white-space: nowrap;
-            display: inline-block;
-        }
+        body { font-family: 'Sarabun', sans-serif; background-color: #f4f6f9; }
+        .admin-header { background-color: #28a745; color: white; padding: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .table th { background-color: #e9ecef; font-weight: 600; }
+        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; white-space: nowrap; display: inline-block; }
         .status-pending { background-color: #ffc107; color: #000; }
         .status-success { background-color: #28a745; color: #fff; }
     </style>
 </head>
 <body>
-
-    <!-- Header -->
     <div class="admin-header text-center mb-5">
         <h2><i class="fa-solid fa-clipboard-check me-2"></i>ระบบหลังบ้าน (Admin Dashboard)</h2>
         <p class="mb-0">จัดการคิวงานลูกค้า - ร้านเมืองแอร์ดี</p>
     </div>
 
-    <!-- Main Content -->
     <div class="container-fluid px-4">
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
@@ -61,74 +36,37 @@
                 <button class="nav-link fw-bold text-primary" id="techs-tab" data-bs-toggle="tab" data-bs-target="#techs-panel" type="button" role="tab"><i class="fa-solid fa-users-gear me-2"></i>จัดการทีมช่าง</button>
             </li>
         </ul>
-
         <div class="tab-content" id="adminTabsContent">
             <!-- ================= BOOKINGS TAB ================= -->
             <div class="tab-pane fade show active" id="bookings-panel" role="tabpanel">
                 <div class="row">
-            <div class="col-12">
-                <div class="card mb-4">
-                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-list me-2"></i>รายการจองคิวล่าสุด</h5>
-                        <button class="btn btn-outline-success btn-sm" onclick="location.reload()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชข้อมูล</button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>วันที่-เวลาจอง</th>
-                                        <th>ชื่อลูกค้า</th>
-                                        <th>เบอร์โทรศัพท์</th>
-                                        <th>บริการที่ต้องการ</th>
-                                        <th>รายละเอียด / อาการ</th>
-                                        <th>สถานะ</th>
-                                        <th>จัดการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bookingsTableBody">
-                                    <tr>
-                                        <td colspan="7" class="text-center py-4">
-                                            <div class="spinner-border text-success" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                            <p class="mt-2 text-muted">กำลังโหลดข้อมูลจากฐานข้อมูล...</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div> <!-- End Bookings Tab -->
-
-            <!-- ================= TECHS TAB ================= -->
-            <div class="tab-pane fade" id="techs-panel" role="tabpanel">
-                <div class="row">
                     <div class="col-12">
                         <div class="card mb-4">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0 fw-bold text-primary"><i class="fa-solid fa-helmet-safety me-2"></i>รายชื่อช่างในระบบ</h5>
-                                <button class="btn btn-outline-primary btn-sm" onclick="window.fetchTechnicians()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชข้อมูลช่าง</button>
+                                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-list me-2"></i>รายการจองคิวล่าสุด</h5>
+                                <button class="btn btn-outline-success btn-sm" onclick="location.reload()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชข้อมูล</button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover align-middle">
                                         <thead>
                                             <tr>
-                                                <th>ชื่อ-นามสกุล</th>
-                                                <th>เบอร์โทร</th>
-                                                <th>พื้นที่รับงาน</th>
-                                                <th>พิกัดล่าสุด</th>
-                                                <th>สถานะการทำงาน</th>
+                                                <th>วันที่-เวลาจอง</th>
+                                                <th>ชื่อลูกค้า</th>
+                                                <th>เบอร์โทรศัพท์</th>
+                                                <th>บริการที่ต้องการ</th>
+                                                <th>รายละเอียด / อาการ</th>
+                                                <th>สถานะ</th>
                                                 <th>จัดการ</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="techsTableBody">
+                                        <tbody id="bookingsTableBody">
                                             <tr>
-                                                <td colspan="6" class="text-center py-4 text-muted">
-                                                    <i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังโหลดข้อมูลช่าง...
+                                                <td colspan="7" class="text-center py-4">
+                                                    <div class="spinner-border text-success" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <p class="mt-2 text-muted">กำลังโหลดข้อมูลจากฐานข้อมูล...</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -138,135 +76,49 @@
                         </div>
                     </div>
                 </div>
+            </div> <!-- End Bookings Tab -->
+
+            <!-- ================= TECHS TAB ================= -->
+            <div class="tab-pane fade" id="techs-panel" role="tabpanel">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 fw-bold text-primary"><i class="fa-solid fa-helmet-safety me-2"></i>รายชื่อช่างในระบบ</h5>
+                                <button class="btn btn-outline-primary btn-sm" onclick="window.fetchTechnicians()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชทีมช่าง</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>ชื่อ-นามสกุล</th>
+                                                <th>เบอร์ติดต่อ</th>
+                                                <th>พื้นที่รับงาน</th>
+                                                <th>พิกัดล่าสุด</th>
+                                                <th>สถานะ</th>
+                                                <th>จัดการ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="techsTableBody">
+                                            <tr><td colspan="6" class="text-center">กำลังโหลด...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div> <!-- End Techs Tab -->
         </div> <!-- End Tab Content -->
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        
-        // ใช้ Config เดียวกับเว็บหน้าบ้าน
-        const firebaseConfig = {
-            apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
-            authDomain: "muangairdee-62b3e.firebaseapp.com",
-            projectId: "muangairdee-62b3e",
-            storageBucket: "muangairdee-62b3e.firebasestorage.app",
-            messagingSenderId: "278310934572",
-            appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const tableBody = document.getElementById('bookingsTableBody');
-
-        // ฟังก์ชันดึงข้อมูลจาก Firebase
-        async function fetchBookings() {
-            try {
-                // ดึงข้อมูลและเรียงลำดับจากล่าสุดไปเก่าสุด
-                const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                tableBody.innerHTML = ''; // ลบข้อความโหลด
-                
-                if(querySnapshot.empty) {
-                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">ยังไม่มีข้อมูลการจองคิว</td></tr>';
-                    return;
-                }
-
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const docId = docSnap.id;
-                    
-                    // แปลง Timestamp เป็นวันที่เวลาอ่านง่าย
-                    let dateStr = "ไม่มีข้อมูลเวลา";
-                    if(data.createdAt) {
-                        const date = data.createdAt.toDate();
-                        dateStr = date.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
-                    }
-
-                    // จัดการปุ่มสถานะ
-                    let statusClass = data.status === "เสร็จสิ้น" || data.status === "เสร็จสมบูรณ์" ? "status-success" : "status-pending";
-                    
-                    let actionBtn = "";
-                    if(data.status === "เสร็จสิ้น" || data.status === "เสร็จสมบูรณ์") {
-                        actionBtn = `<button class="btn btn-sm btn-secondary" disabled><i class="fa-solid fa-check"></i> งานเสร็จแล้ว</button>`;
-                    } else if(data.assignedTechId) {
-                        actionBtn = `<button class="btn btn-sm btn-info text-white" disabled><i class="fa-solid fa-helmet-safety"></i> จ่ายงานแล้ว</button>`;
-                    } else {
-                        // เก็บพิกัดลูกค้าไว้ใน attribute เพื่อส่งไปให้ Modal
-                        let custLat = data.locationMapLink ? data.locationMapLink.split('=')[1].split(',')[0] : '';
-                        let custLng = data.locationMapLink ? data.locationMapLink.split(',')[1] : '';
-                        
-                        if(custLat && custLng) {
-                            actionBtn = `<button class="btn btn-sm btn-success fw-bold shadow-sm" onclick="window.openDispatchModal('${docId}', ${custLat}, ${custLng})">
-                                <i class="fa-solid fa-truck-fast me-1"></i> จ่ายงาน
-                            </button>`;
-                        } else {
-                            // กรณีไม่มี GPS ลูกค้า ก็กดจ่ายงานได้ แต่ระยะทางอาจจะคำนวณไม่ได้
-                            actionBtn = `<button class="btn btn-sm btn-warning fw-bold shadow-sm" onclick="window.openDispatchModal('${docId}', 0, 0)">
-                                <i class="fa-solid fa-truck-fast me-1"></i> จ่ายงาน (ไม่มี GPS)
-                            </button>`;
-                        }
-                    }
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${dateStr}</td>
-                        <td class="fw-bold">
-                            ${data.customerName || '-'}
-                            ${data.customerAddress ? `<br><small class="text-muted fw-normal"><i class="fa-solid fa-location-dot me-1"></i>${data.customerAddress}</small>` : ''}
-                            ${data.locationMapLink ? `<br><a href="${data.locationMapLink}" target="_blank" class="btn btn-sm btn-outline-success mt-1" style="font-size: 0.75rem;"><i class="fa-solid fa-map-location-dot me-1"></i>เปิดแผนที่นำทาง GPS</a>` : ''}
-                        </td>
-                        <td>
-                            <a href="tel:${data.customerPhone}">${data.customerPhone || '-'}</a>
-                            ${data.customerContactExtra ? `<br><small class="text-muted fw-normal"><i class="fa-regular fa-envelope me-1"></i>${data.customerContactExtra}</small>` : ''}
-                        </td>
-                        <td><span class="badge bg-info text-dark">${data.serviceType || '-'}</span></td>
-                        <td>${data.serviceDetails || '-'}</td>
-                        <td><span class="status-badge ${statusClass}">${data.status || 'รอดำเนินการ'}</span></td>
-                        <td>${actionBtn}</td>
-                    `;
-                    tableBody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
-            }
-        }
-
-        // ทำให้ฟังก์ชัน updateStatus เรียกใช้ได้จากปุ่ม HTML (Global scope)
-        window.updateStatus = async function(docId) {
-            if(confirm("ยืนยันว่าทำงานนี้เสร็จสิ้นแล้วใช่หรือไม่?")) {
-                try {
-                    const bookingRef = doc(db, "bookings", docId);
-                    await updateDoc(bookingRef, {
-                        status: "เสร็จสิ้น"
-                    });
-                    alert("อัปเดตสถานะเป็น 'เสร็จสิ้น' เรียบร้อยแล้ว!");
-                    fetchBookings(); // โหลดข้อมูลใหม่
-                } catch (error) {
-                    console.error("Error updating document: ", error);
-                    alert("เกิดข้อผิดพลาดในการอัปเดตข้อมูล");
-                }
-            }
-        }
-
-        // โหลดข้อมูลทันทีเมื่อเปิดหน้า
-        fetchBookings();
-    </script>
+    </div> <!-- End Container -->
 
     <!-- ================= MODAL DISPATCH ================= -->
     <div class="modal fade" id="dispatchModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title"><i class="fa-solid fa-map-location-dot me-2"></i>ระบบจ่ายงานให้ช่าง (ค้นหาช่างที่ใกล้ที่สุด)</h5>
+                    <h5 class="modal-title"><i class="fa-solid fa-map-location-dot me-2"></i>ระบบจ่ายงานช่าง (หาช่างที่ใกล้ที่สุด)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -293,6 +145,367 @@
             </div>
         </div>
     </div>
+﻿    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5yxBVLnTEj41ank6sM7rptNiwmPiZZVo",
+            authDomain: "muangairdee-62b3e.firebaseapp.com",
+            projectId: "muangairdee-62b3e",
+            storageBucket: "muangairdee-62b3e.firebasestorage.app",
+            messagingSenderId: "278310934572",
+            appId: "1:278310934572:web:5add9f5131a2bc65d3d989"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        window.dbObj = db;
+        window.getDocObj = getDoc;
 
+        const tableBody = document.getElementById('bookingsTableBody');
+
+        async function fetchBookings() {
+            try {
+                const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                tableBody.innerHTML = ''; 
+                
+                if(querySnapshot.empty) {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">ยังไม่มีข้อมูลการจองคิว</td></tr>';
+                    return;
+                }
+
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
+                    
+                    let dateStr = "ไม่มีข้อมูลเวลา";
+                    if(data.createdAt) {
+                        const date = data.createdAt.toDate();
+                        dateStr = date.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
+                    }
+
+                    let statusClass = data.status === "เสร็จสิ้น" ? "status-success" : "status-pending";
+                    
+                    let actionBtn;
+                    if (data.status === "เสร็จสิ้น") {
+                        actionBtn = '<button class="btn btn-sm btn-secondary" disabled><i class="fa-solid fa-check"></i> เสร็จแล้ว</button>';
+                    } else if (data.status === "จ่ายงานแล้ว") {
+                        actionBtn = '<button class="btn btn-sm btn-primary" onclick="window.printJobOrder(\'' + docId + '\', \'' + data.assignedTechId + '\')"><i class="fa-solid fa-print me-1"></i>🖨️ พิมพ์ใบสั่งงาน</button>';
+                    } else {
+                        let lat = data.location ? data.location.lat : 'null';
+                        let lng = data.location ? data.location.lng : 'null';
+                        actionBtn = '<button class="btn btn-sm btn-success" onclick="window.openDispatchModal(\'' + docId + '\', ' + lat + ', ' + lng + ')"><i class="fa-solid fa-location-dot me-1"></i>📍 จ่ายงาน</button>';
+                    }
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td>' + dateStr + '</td>' +
+                        '<td class="fw-bold">' +
+                            (data.customerName || '-') +
+                            (data.customerAddress ? '<br><small class="text-muted fw-normal"><i class="fa-solid fa-location-dot me-1"></i>' + data.customerAddress + '</small>' : '') +
+                            (data.locationMapLink ? '<br><a href="' + data.locationMapLink + '" target="_blank" class="btn btn-sm btn-outline-success mt-1" style="font-size: 0.75rem;"><i class="fa-solid fa-map-location-dot me-1"></i>เปิดแผนที่นำทาง GPS</a>' : '') +
+                        '</td>' +
+                        '<td>' +
+                            '<a href="tel:' + data.customerPhone + '">' + (data.customerPhone || '-') + '</a>' +
+                            (data.customerContactExtra ? '<br><small class="text-muted fw-normal"><i class="fa-regular fa-envelope me-1"></i>' + data.customerContactExtra + '</small>' : '') +
+                        '</td>' +
+                        '<td><span class="badge bg-info text-dark">' + (data.serviceType || '-') + '</span></td>' +
+                        '<td>' + (data.serviceDetails || '-') + '</td>' +
+                        '<td><span class="status-badge ' + statusClass + '">' + (data.status || 'รอดำเนินการ') + '</span></td>' +
+                        '<td>' + actionBtn + '</td>';
+                    tableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
+            }
+        }
+
+        const techsTableBody = document.getElementById('techsTableBody');
+        
+        window.fetchTechnicians = async function() {
+            try {
+                const q = query(collection(db, "technicians"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                techsTableBody.innerHTML = '';
+                
+                if(querySnapshot.empty) {
+                    techsTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">ยังไม่มีข้อมูลช่างในระบบ</td></tr>';
+                    return;
+                }
+
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
+                    
+                    let statusBadge = data.status === "อนุมัติแล้ว" 
+                        ? '<span class="badge bg-success">อนุมัติแล้ว</span>' 
+                        : '<span class="badge bg-warning text-dark">รออนุมัติ</span>';
+                        
+                    let currentStatusBadge = data.currentStatus === "Online" 
+                        ? '<span class="badge bg-primary"><i class="fa-solid fa-circle text-success me-1" style="font-size:8px;"></i>Online</span>' 
+                        : '<span class="badge bg-secondary"><i class="fa-solid fa-circle text-danger me-1" style="font-size:8px;"></i>Offline</span>';
+
+                    let mapBtn = data.baseLocation 
+                        ? '<a href="https://www.google.com/maps?q=' + data.baseLocation.lat + ',' + data.baseLocation.lng + '" target="_blank" class="btn btn-sm btn-outline-success"><i class="fa-solid fa-map-location-dot"></i> ดูแผนที่</a>' 
+                        : '-';
+                        
+                    let actionBtn = data.status !== "อนุมัติแล้ว"
+                        ? '<button class="btn btn-sm btn-success" onclick="window.approveTech(\'' + docId + '\')"><i class="fa-solid fa-check me-1"></i>อนุมัติ</button>'
+                        : '<button class="btn btn-sm btn-outline-danger" onclick="window.revokeTech(\'' + docId + '\')"><i class="fa-solid fa-xmark me-1"></i>ระงับ</button>';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td><strong>' + (data.techName || '-') + '</strong></td>' +
+                                   '<td>' + (data.techPhone || '-') + '<br><small class="text-muted">Line: ' + (data.techLineId || '-') + '</small></td>' +
+                                   '<td>' + (data.techArea || '-') + '</td>' +
+                                   '<td>' + mapBtn + '</td>' +
+                                   '<td>' + statusBadge + '<br><div class="mt-1">' + currentStatusBadge + '</div></td>' +
+                                   '<td>' + actionBtn + '</td>';
+                    techsTableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error fetching technicians:", error);
+                techsTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
+            }
+        };
+
+        window.approveTech = async function(docId) {
+            if(confirm("ยืนยันการอนุมัติช่างคนนี้? (ช่างจะสามารถเข้าสู่ระบบและรับงานได้)")) {
+                try {
+                    await updateDoc(doc(db, "technicians", docId), { status: "อนุมัติแล้ว" });
+                    alert("อนุมัติช่างสำเร็จ!");
+                    window.fetchTechnicians();
+                } catch(err) {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาด");
+                }
+            }
+        };
+
+        window.revokeTech = async function(docId) {
+            if(confirm("ยืนยันการระงับช่างคนนี้? (ช่างจะไม่สามารถเข้าสู่ระบบหรือรับงานได้)")) {
+                try {
+                    await updateDoc(doc(db, "technicians", docId), { status: "รออนุมัติ", currentStatus: "Offline" });
+                    alert("ระงับช่างสำเร็จ!");
+                    window.fetchTechnicians();
+                } catch(err) {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาด");
+                }
+            }
+        };
+
+        let currentBookingIdForDispatch = null;
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            if(!lat1 || !lon1 || !lat2 || !lon2) return 9999;
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            const d = R * c; 
+            return d;
+        }
+
+        window.openDispatchModal = async function(bookingId, custLat, custLng) {
+            currentBookingIdForDispatch = bookingId;
+            const modalElement = new bootstrap.Modal(document.getElementById('dispatchModal'));
+            modalElement.show();
+
+            const tbody = document.getElementById('dispatchTableBody');
+            const locLabel = document.getElementById('modalCustomerLoc');
+            
+            if(custLat !== null && custLng !== null && custLat !== undefined && custLng !== undefined) {
+                locLabel.innerHTML = '<a href="https://www.google.com/maps?q=' + custLat + ',' + custLng + '" target="_blank" class="text-success">' + custLat + ', ' + custLng + '</a>';
+            } else {
+                locLabel.innerHTML = '<span class="text-danger">ลูกค้าไม่ได้ระบุพิกัด GPS</span>';
+            }
+
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center"><i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังค้นหาช่างที่ออนไลน์...</td></tr>';
+
+            try {
+                const q = query(collection(db, "technicians"));
+                const querySnapshot = await getDocs(q);
+                
+                let availableTechs = [];
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if(data.status === "อนุมัติแล้ว" && data.currentStatus === "Online") {
+                        let dist = 9999;
+                        if(custLat !== null && custLng !== null && data.baseLocation) {
+                            dist = calculateDistance(custLat, custLng, data.baseLocation.lat, data.baseLocation.lng);
+                        }
+                        availableTechs.push({
+                            id: docSnap.id,
+                            name: data.techName,
+                            phone: data.techPhone,
+                            dist: dist
+                        });
+                    }
+                });
+
+                availableTechs.sort((a, b) => a.dist - b.dist);
+
+                if(availableTechs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger fw-bold py-4"><i class="fa-solid fa-triangle-exclamation fa-2x mb-2 d-block"></i>ขณะนี้ไม่มีช่างออนไลน์ในระบบ</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                availableTechs.forEach((tech, index) => {
+                    let distText = tech.dist === 9999 ? 'ไม่สามารถคำนวณได้' : tech.dist.toFixed(2) + ' กม.';
+                    let badge = index === 0 ? '<span class="badge bg-success">ใกล้สุด</span>' : '';
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td>' + (index + 1) + '</td>' +
+                                   '<td><strong>' + tech.name + '</strong> ' + badge + '<br><small class="text-muted">' + tech.phone + '</small></td>' +
+                                   '<td><span class="badge bg-primary">Online</span></td>' +
+                                   '<td class="fw-bold text-success">' + distText + '</td>' +
+                                   '<td>' +
+                                       '<button class="btn btn-sm btn-primary" onclick="window.assignJobToTech(\'' + tech.id + '\')">' +
+                                           '<i class="fa-solid fa-paper-plane me-1"></i>ส่งงาน' +
+                                       '</button>' +
+                                   '</td>';
+                    tbody.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error("Error in dispatch:", error);
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">เกิดข้อผิดพลาดในการดึงข้อมูลช่าง</td></tr>';
+            }
+        };
+
+        window.assignJobToTech = async function(techId) {
+            if(confirm("ยืนยันการส่งงานให้ช่างคนนี้ใช่หรือไม่?")) {
+                try {
+                    const bookingRef = doc(db, "bookings", currentBookingIdForDispatch);
+                    await updateDoc(bookingRef, {
+                        assignedTechId: techId,
+                        status: "จ่ายงานแล้ว"
+                    });
+                    alert("ส่งงานให้ช่างเรียบร้อยแล้ว!");
+                    
+                    const modalEl = document.getElementById('dispatchModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                    window.fetchBookings();
+                } catch(err) {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาดในการจ่ายงาน");
+                }
+            }
+        };
+
+        window.printJobOrder = async function(bookingId, techId) {
+            try {
+                const bookingRef = doc(db, "bookings", bookingId);
+                const bookingSnap = await window.getDocObj(bookingRef); 
+                const bookingData = bookingSnap.data();
+                
+                const techRef = doc(db, "technicians", techId);
+                const techSnap = await window.getDocObj(techRef);
+                const techData = techSnap.data();
+                
+                if(!bookingData || !techData) {
+                    alert('ไม่พบข้อมูลในระบบ');
+                    return;
+                }
+
+                const printWindow = window.open('', '_blank');
+                
+                const html = "<!DOCTYPE html>\n" +
+                    "<html lang=\"th\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>ใบสั่งงานช่าง (Job Order)</title>\n" +
+                    "    <style>\n" +
+                    "        body { font-family: sans-serif; padding: 40px; color: #333; }\n" +
+                    "        .header { text-align: center; border-bottom: 2px solid #28a745; padding-bottom: 20px; margin-bottom: 20px; }\n" +
+                    "        .header h2 { margin: 0; color: #28a745; }\n" +
+                    "        .header p { margin: 5px 0 0 0; color: #666; }\n" +
+                    "        .section { margin-bottom: 25px; }\n" +
+                    "        .section-title { font-size: 18px; font-weight: bold; background-color: #f4f6f9; padding: 10px; border-left: 5px solid #28a745; }\n" +
+                    "        table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n" +
+                    "        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }\n" +
+                    "        th { width: 30%; color: #555; }\n" +
+                    "        .signatures { margin-top: 50px; display: flex; justify-content: space-between; }\n" +
+                    "        .sign-box { text-align: center; width: 30%; }\n" +
+                    "        .sign-line { border-bottom: 1px dashed #999; margin-bottom: 10px; margin-top: 50px; }\n" +
+                    "        @media print { body { padding: 0; } .no-print { display: none; } }\n" +
+                    "    </style>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "    <div class=\"no-print\" style=\"text-align: right; margin-bottom: 20px;\">\n" +
+                    "        <button onclick=\"window.print()\" style=\"padding: 10px 20px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer;\">🖨️ พิมพ์เอกสาร</button>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"header\">\n" +
+                    "        <h2>🔧 เมืองแอร์ดี (Muang Air Dee)</h2>\n" +
+                    "        <p>ใบสั่งงานช่าง (Job Dispatch Order)</p>\n" +
+                    "        <p><strong>วันที่ออกเอกสาร:</strong> " + new Date().toLocaleString('th-TH') + "</p>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"section\">\n" +
+                    "        <div class=\"section-title\">👤 ข้อมูลลูกค้า (Customer Info)</div>\n" +
+                    "        <table>\n" +
+                    "            <tr><th>ชื่อลูกค้า:</th><td>" + bookingData.customerName + "</td></tr>\n" +
+                    "            <tr><th>เบอร์โทรติดต่อ:</th><td>" + bookingData.customerPhone + "</td></tr>\n" +
+                    "            <tr><th>ที่อยู่หน้างาน:</th><td>" + bookingData.customerAddress + "</td></tr>\n" +
+                    "            <tr><th>บริการที่เลือก:</th><td><strong>" + bookingData.serviceType + "</strong></td></tr>\n" +
+                    "            <tr><th>รายละเอียดเพิ่มเติม:</th><td>" + (bookingData.serviceDetails || '-') + "</td></tr>\n" +
+                    "        </table>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"section\">\n" +
+                    "        <div class=\"section-title\">👷 ข้อมูลช่างผู้รับผิดชอบ (Assigned Technician)</div>\n" +
+                    "        <table>\n" +
+                    "            <tr><th>รหัสช่าง / ชื่อ:</th><td><strong>ช่าง" + techData.techName + "</strong></td></tr>\n" +
+                    "            <tr><th>เบอร์โทรช่าง:</th><td>" + techData.techPhone + "</td></tr>\n" +
+                    "        </table>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"signatures\">\n" +
+                    "        <div class=\"sign-box\">\n" +
+                    "            <div class=\"sign-line\"></div>\n" +
+                    "            <p>ผู้จ่ายงาน (แอดมินร้าน)</p>\n" +
+                    "        </div>\n" +
+                    "        <div class=\"sign-box\">\n" +
+                    "            <div class=\"sign-line\"></div>\n" +
+                    "            <p>ช่างผู้รับงาน</p>\n" +
+                    "        </div>\n" +
+                    "        <div class=\"sign-box\">\n" +
+                    "            <div class=\"sign-line\"></div>\n" +
+                    "            <p>ลูกค้า (เซ็นเมื่อรับงานเสร็จ)</p>\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</body>\n" +
+                    "</html>";
+                
+                printWindow.document.write(html);
+                printWindow.document.close();
+                
+                setTimeout(function() {
+                    printWindow.print();
+                }, 500);
+                
+            } catch (error) {
+                console.error("Error generating print:", error);
+                alert("เกิดข้อผิดพลาดในการสร้างเอกสาร");
+            }
+        };
+
+        window.fetchBookings = fetchBookings;
+        window.fetchTechnicians();
+
+        fetchBookings();
+    </script>
 </body>
 </html>
