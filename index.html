@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -283,8 +283,8 @@
                     <li class="nav-item"><a class="nav-link" href="#products">แอร์ & อะไหล่</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">ติดต่อเรา</a></li>
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex gap-2">
-                        <button class="btn btn-primary-custom px-4 py-2" style="border-radius: 50px;" data-bs-toggle="modal" data-bs-target="#bookingModal">จองคิว</button>
-                        <a href="customer_dashboard.html" class="btn text-white px-4 py-2" style="background-color: #ff7a45; border-radius: 50px; font-weight: 500; transition: all 0.3s;"><i class="fa-solid fa-user me-1"></i> เข้าสู่ระบบ</a>
+                        <a href="tech_dashboard.html" class="btn btn-primary-custom px-4 py-2" style="border-radius: 50px; font-weight: 500; transition: all 0.3s; text-decoration: none;"><i class="fa-solid fa-screwdriver-wrench me-1"></i> สมัครช่างในพื้นที่</a>
+                        <button class="btn text-white px-4 py-2" style="background-color: #ff7a45; border-radius: 50px; font-weight: 500; transition: all 0.3s; border: none;" data-bs-toggle="modal" data-bs-target="#bookingModal"><i class="fa-solid fa-user me-1"></i> เข้าสู่ระบบ</button>
                     </li>
                 </ul>
             </div>
@@ -627,12 +627,15 @@
                         createdAt: serverTimestamp()
                     });
                     
-                    alert("จองคิวสำเร็จ! ข้อมูลของคุณถูกส่งเรียบร้อยแล้ว ช่างจะรีบติดต่อกลับโดยเร็วที่สุดครับ (เลขอ้างอิง: " + docRef.id + ")");
-                    bookingForm.reset();
+                    alert("เข้าสู่ระบบ และจองคิวสำเร็จ! กำลังพาท่านไปยังหน้าระบบลูกค้า (เลขอ้างอิง: " + docRef.id + ")");
                     
-                    // ปิด Modal อัตโนมัติ
-                    const bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
-                    if (bookingModal) bookingModal.hide();
+                    // บันทึกข้อมูลซิงก์เข้าระบบ (Auto-Login)
+                    localStorage.setItem('customerPhone', phone);
+                    localStorage.setItem('customerName', name);
+                    if(address) localStorage.setItem('customerAddress', address);
+                    
+                    // พุ่งตรงไปที่หน้า customer_dashboard.html
+                    window.location.href = 'customer_dashboard.html';
                     
                 } catch (error) {
                     console.error("Error adding document: ", error);
