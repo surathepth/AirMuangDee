@@ -502,7 +502,7 @@
                                 completedAt: new Date()
                             });
                             alert('ส่งมอบงานเรียบร้อยแล้ว');
-                            loadAssignedJobs();
+                            // ไม่ต้องเรียก loadAssignedJobs() เพราะ onSnapshot จะโหลดให้อัตโนมัติ
                         } catch (error) {
                             console.error("Error updating status:", error);
                             alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
