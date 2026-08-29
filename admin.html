@@ -563,7 +563,7 @@
                     if (data.status === "เสร็จสิ้น") {
                         actionBtn = '<button class="btn btn-sm btn-secondary" disabled><i class="fa-solid fa-check"></i> เสร็จแล้ว</button>';
                     } else if (data.status === "จ่ายงานแล้ว") {
-                        actionBtn = '<button class="btn btn-sm btn-primary" onclick="window.printJobOrder(\'' + docId + '\', \'' + data.assignedTechId + '\')"><i class="fa-solid fa-print me-1"></i>🖨️ พิมพ์ใบสั่งงาน</button>';
+                        actionBtn = '<button class="btn btn-sm btn-primary text-nowrap" onclick="window.printJobOrder(\'' + docId + '\', \'' + data.assignedTechId + '\')"><i class="fa-solid fa-print me-1"></i> พิมพ์ใบสั่งงาน</button>';
                     } else if (data.status === "รอชำระเงิน") {
                         actionBtn = '<button class="btn btn-sm btn-success" onclick="window.openPaymentModal(\'' + docId + '\', \'' + data.customerName + '\', \'' + data.serviceType + '\')"><i class="fa-solid fa-money-bill-wave me-1"></i>ชำระเงิน/ส่งมอบ</button>';
                     } else {
