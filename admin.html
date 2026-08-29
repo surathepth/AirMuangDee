@@ -354,6 +354,14 @@
                 const q = query(collection(db, "bookings"), where("status", "==", "เสร็จสิ้น"));
                 const querySnapshot = await getDocs(q);
                 
+                // Fetch all technicians to memory for mapping
+                const techQ = query(collection(db, "technicians"));
+                const techSnap = await getDocs(techQ);
+                const techMap = {};
+                techSnap.forEach((tDoc) => {
+                    techMap[tDoc.id] = tDoc.data();
+                });
+                
                 allReportData = [];
                 let totalCash = 0;
             let totalTransfer = 0;
@@ -362,6 +370,18 @@
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     data.id = doc.id;
+                    
+                    // 1. Map technician name and phone
+                    if (data.assignedTechId && techMap[data.assignedTechId]) {
+                        data.techName = techMap[data.assignedTechId].name || techMap[data.assignedTechId].techName || data.techName;
+                        data.techPhone = techMap[data.assignedTechId].phone || techMap[data.assignedTechId].techPhone || data.techPhone;
+                    }
+                    
+                    // 2. Fix missing completedAt for old records
+                    if (!data.completedAt && data.createdAt) {
+                        data.completedAt = data.createdAt;
+                    }
+                    
                     allReportData.push(data);
                 });
                 
