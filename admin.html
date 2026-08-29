@@ -367,8 +367,9 @@
                 
                 // Sort by completedAt descending (newest first)
                 allReportData.sort((a, b) => {
-                    const dateA = a.completedAt ? a.completedAt.toMillis() : 0;
-                    const dateB = b.completedAt ? b.completedAt.toMillis() : 0;
+                    const getMillis = (val) => { if(!val) return 0; if(typeof val.toMillis === 'function') return val.toMillis(); if(val instanceof Date) return val.getTime(); return new Date(val).getTime() || 0; };
+                    const dateA = getMillis(a.completedAt);
+                    const dateB = getMillis(b.completedAt);
                     return dateB - dateA;
                 });
                 
@@ -377,9 +378,7 @@
                 
             } catch (error) {
                 console.error("Error loading reports:", error);
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Error: ${error.message}</td></tr>`;
-            }</td></tr>`;
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">เกิดข้อผิดพลาดในการโหลดข้อมูล: ${error.message}</td></tr>`;
             }
         }
         
@@ -396,7 +395,7 @@
             if(filterDateStartStr || filterDateEndStr) {
                 filteredData = allReportData.filter(job => {
                     if(!job.completedAt) return false;
-                    const jobDate = job.completedAt.toDate();
+                    let jobDate; if(typeof job.completedAt.toDate === 'function') { jobDate = job.completedAt.toDate(); } else if(job.completedAt instanceof Date) { jobDate = job.completedAt; } else { jobDate = new Date(job.completedAt); }
                     const jobDateOnly = new Date(jobDate.getFullYear(), jobDate.getMonth(), jobDate.getDate()).getTime();
                     
                     let passStart = true;
@@ -428,7 +427,7 @@
             filteredData.forEach(job => {
                 let dateStr = "ไม่ระบุเวลา";
                 if(job.completedAt) {
-                    const d = job.completedAt.toDate();
+                    let d; if(typeof job.completedAt.toDate === 'function') { d = job.completedAt.toDate(); } else if(job.completedAt instanceof Date) { d = job.completedAt; } else { d = new Date(job.completedAt); }
                     dateStr = d.toLocaleDateString('th-TH') + ' ' + d.toLocaleTimeString('th-TH').substring(0,5);
                 }
                 
