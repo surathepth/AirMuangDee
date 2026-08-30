@@ -80,7 +80,7 @@
                 </div>
                 <hr class="my-4">
                 <div class="text-center">
-                    <a href="index.html" class="btn btn-orange px-5 py-2 rounded-pill fs-5"><i class="fa-solid fa-plus-circle me-2"></i> จองคิวเรียกช่างใหม่</a>
+                    <a href="index.html?action=book" class="btn btn-orange px-5 py-2 rounded-pill fs-5"><i class="fa-solid fa-plus-circle me-2"></i> จองคิวเรียกช่างใหม่</a>
                 </div>
             </div>
         </div>
@@ -272,10 +272,29 @@
 
                   // Sort documents in memory using JavaScript (New -> Old)
                   let docsArray = [];
-                  snapshot.forEach((doc) => { docsArray.push(doc); });
+                  
+                  // Fetch Technicians to map IDs to Names (Targeted Surgical Edit)
+                  db.collection("technicians").get().then((techSnap) => {
+                      const techMap = {};
+                      techSnap.forEach((tDoc) => {
+                          techMap[tDoc.id] = tDoc.data();
+                      });
+                      
+                      snapshot.forEach((doc) => { 
+                          let data = doc.data();
+                          if (data.assignedTechId && techMap[data.assignedTechId]) {
+                              data.technicianName = techMap[data.assignedTechId].techName || data.technicianName;
+                          }
+                          // Mocking doc.data() to return updated data
+                          let modifiedDoc = {
+                              id: doc.id,
+                              data: function() { return data; }
+                          };
+                          docsArray.push(modifiedDoc); 
+                      });
                   docsArray.sort((a, b) => {
-                      let dateA = a.data().createdAt ? a.data().createdAt.toMillis() : 0;
-                      let dateB = b.data().createdAt ? b.data().createdAt.toMillis() : 0;
+                      let dateA = a.data().createdAt ? (typeof a.data().createdAt.toMillis === 'function' ? a.data().createdAt.toMillis() : new Date(a.data().createdAt).getTime()) : 0;
+                      let dateB = b.data().createdAt ? (typeof b.data().createdAt.toMillis === 'function' ? b.data().createdAt.toMillis() : new Date(b.data().createdAt).getTime()) : 0;
                       return dateB - dateA; // Descending
                   });
 
@@ -310,10 +329,12 @@
                       }
 
                       const techName = data.technicianName || 'ยังไม่มีผู้รับงาน';
+const serviceName = data.serviceType || data.service || 'เรียกช่างแอร์';
 
-                      const cardHtml = '<div class="card shadow-sm border-0 rounded-4 mb-3" style="transition: transform 0.2s;"><div class="card-body p-4"><div class="d-flex justify-content-between align-items-center mb-2"><h5 class="fw-bold mb-0 text-dark"><i class="fa-solid ' + icon + ' me-2"></i> ' + data.service + '</h5>' + statusBadge + '</div><hr class="text-muted my-2"><div class="row small text-muted"><div class="col-sm-6 mb-1"><i class="fa-solid fa-calendar-days me-1"></i> <strong>วันที่จอง:</strong> ' + dateStr + '</div><div class="col-sm-6 mb-1"><i class="fa-solid fa-user-gear me-1"></i> <strong>ช่างที่รับผิดชอบ:</strong> ' + techName + '</div>' + paymentHtml + '</div></div></div>';
+                      const cardHtml = '<div class="card shadow-sm border-0 rounded-4 mb-3" style="transition: transform 0.2s;"><div class="card-body p-4"><div class="d-flex justify-content-between align-items-center mb-2"><h5 class="fw-bold mb-0 text-dark"><i class="fa-solid ' + icon + ' me-2"></i> ' + serviceName + '</h5>' + statusBadge + '</div><hr class="text-muted my-2"><div class="row small text-muted"><div class="col-sm-6 mb-1"><i class="fa-solid fa-calendar-days me-1"></i> <strong>วันที่จอง:</strong> ' + dateStr + '</div><div class="col-sm-6 mb-1"><i class="fa-solid fa-user-gear me-1"></i> <strong>ช่างที่รับผิดชอบ:</strong> ' + techName + '</div>' + paymentHtml + '</div></div></div>';
                       listDiv.innerHTML += cardHtml;
                   });
+                  }); // Close techSnap then
               }, (error) => {
                   console.error("Error fetching history:", error);
                   listDiv.innerHTML = '<div class="alert alert-danger text-center">เกิดข้อผิดพลาดในการโหลดประวัติ</div>';

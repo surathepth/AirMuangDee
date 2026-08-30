@@ -810,5 +810,39 @@
             }
         });
     </script>
+
+<script>
+    // Auto-open booking modal if action=book is in URL
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('action') === 'book') {
+            setTimeout(() => {
+                const modalEl = document.getElementById('bookingModal');
+                if (modalEl) {
+                    const bookingModal = new bootstrap.Modal(modalEl);
+                    bookingModal.show();
+                }
+            }, 500);
+        }
+        
+        // Auto-fill form when modal opens
+        const modalEl2 = document.getElementById('bookingModal');
+        if (modalEl2) {
+            modalEl2.addEventListener('show.bs.modal', function () {
+                const loggedInUserPhone = localStorage.getItem('customerPhone');
+                if (loggedInUserPhone) {
+                    const cName = localStorage.getItem('customerName');
+                    const cPhone = localStorage.getItem('customerPhone');
+                    const cAddr = localStorage.getItem('customerAddress');
+                    
+                    if (cName && document.getElementById('customerName')) document.getElementById('customerName').value = cName;
+                    if (cPhone && document.getElementById('customerPhone')) document.getElementById('customerPhone').value = cPhone;
+                    if (cAddr && document.getElementById('addr_house')) document.getElementById('addr_house').value = cAddr;
+                }
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
