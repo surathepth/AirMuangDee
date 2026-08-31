@@ -38,6 +38,12 @@
               <li class="nav-item" role="presentation">
                   <button class="nav-link fw-bold text-info" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports-panel" type="button" role="tab" onclick="loadReports()"><i class="fa-solid fa-chart-line me-2"></i>รายงานสรุปยอด</button>
               </li>
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link fw-bold text-secondary" id="tech-history-tab" data-bs-toggle="tab" data-bs-target="#tech-history-panel" type="button" role="tab"><i class="fa-solid fa-clock-rotate-left me-2"></i>ประวัติช่าง</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link fw-bold text-warning" id="customer-history-tab" data-bs-toggle="tab" data-bs-target="#customer-history-panel" type="button" role="tab"><i class="fa-solid fa-user-clock me-2"></i>ประวัติลูกค้า</button>
+              </li>
         </ul>
         <div class="tab-content" id="adminTabsContent">
             <!-- ================= BOOKINGS TAB ================= -->
@@ -174,6 +180,112 @@
                   </div>
               </div>
 
+
+<!-- ================= TECH HISTORY TAB ================= -->
+            <div class="tab-pane fade" id="tech-history-panel" role="tabpanel">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4 border-0 shadow-sm rounded-4">
+                            <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center rounded-top-4">
+                                <h5 class="mb-0 fw-bold text-secondary"><i class="fa-solid fa-clock-rotate-left me-2"></i>ประวัติการปฏิบัติงานของช่าง</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3">
+                                        <label class="form-label text-muted small">ตั้งแต่วันที่</label>
+                                        <input type="date" id="techHistoryStart" class="form-control rounded-pill">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label text-muted small">ถึงวันที่</label>
+                                        <input type="date" id="techHistoryEnd" class="form-control rounded-pill">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-muted small">ค้นหาชื่อ / เบอร์โทรช่าง</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill"><i class="fa-solid fa-search text-muted"></i></span>
+                                            <input type="text" id="techHistorySearch" class="form-control border-start-0 rounded-end-pill" placeholder="พิมพ์ชื่อหรือเบอร์ช่าง...">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button class="btn btn-secondary w-100 rounded-pill" onclick="window.loadTechHistory()"><i class="fa-solid fa-filter me-2"></i>ค้นหา</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>วันที่ / เวลา</th>
+                                                <th>ชื่อช่าง / เบอร์โทร</th>
+                                                <th>งานซ่อมที่ทำ</th>
+                                                <th>สินค้าที่ขาย</th>
+                                                <th>ลูกค้าที่รับบริการ</th>
+                                                <th>ยอดเงินรวม</th>
+                                                <th>วิธีชำระเงิน</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="techHistoryTableBody">
+                                            <tr><td colspan="7" class="text-center py-4 text-muted">ระบุเงื่อนไขและกดค้นหาประวัติช่าง...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!-- ================= CUSTOMER HISTORY TAB ================= -->
+            <div class="tab-pane fade" id="customer-history-panel" role="tabpanel">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4 border-0 shadow-sm rounded-4">
+                            <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center rounded-top-4">
+                                <h5 class="mb-0 fw-bold text-warning"><i class="fa-solid fa-user-clock me-2"></i>ประวัติการรับบริการของลูกค้า</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3">
+                                        <label class="form-label text-muted small">ตั้งแต่วันที่</label>
+                                        <input type="date" id="customerHistoryStart" class="form-control rounded-pill">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label text-muted small">ถึงวันที่</label>
+                                        <input type="date" id="customerHistoryEnd" class="form-control rounded-pill">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-muted small">ค้นหาชื่อ / เบอร์โทรลูกค้า</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill"><i class="fa-solid fa-search text-muted"></i></span>
+                                            <input type="text" id="customerHistorySearch" class="form-control border-start-0 rounded-end-pill" placeholder="พิมพ์ชื่อหรือเบอร์ลูกค้า...">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button class="btn btn-warning text-dark w-100 rounded-pill" onclick="window.loadCustomerHistory()"><i class="fa-solid fa-filter me-2"></i>ค้นหา</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>วันที่ / เวลา</th>
+                                                <th>ชื่อลูกค้า / เบอร์โทร</th>
+                                                <th>งานซ่อมที่รับบริการ</th>
+                                                <th>สินค้าที่ซื้อ</th>
+                                                <th>ช่างที่ให้บริการ</th>
+                                                <th>ยอดเงินรวม</th>
+                                                <th>วิธีชำระเงิน</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="customerHistoryTableBody">
+                                            <tr><td colspan="7" class="text-center py-4 text-muted">ระบุเงื่อนไขและกดค้นหาประวัติลูกค้า...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 <!-- ================= TECHS TAB ================= -->
             <div class="tab-pane fade" id="techs-panel" role="tabpanel">
                 <div class="row">
@@ -551,6 +663,193 @@
         window.loadReports = loadReports;
         window.filterReportTable = filterReportTable;
         window.renderReportTable = renderReportTable;
+
+        // =============================================================
+        // HISTORY REPORT FUNCTIONS
+        // =============================================================
+        async function fetchHistoryData(startDate, endDate, searchKeyword, isTech) {
+            const bookingsRef = collection(db, "bookings");
+            let q = query(bookingsRef, orderBy("createdAt", "desc"));
+            const snapshot = await getDocs(q);
+            
+            let results = [];
+            snapshot.forEach(doc => {
+                let data = doc.data();
+                data.id = doc.id;
+                
+                // Tech Name/Phone Mapping Logic
+                if (data.assignedTechId && window.techMap && window.techMap[data.assignedTechId]) {
+                    data.techName = window.techMap[data.assignedTechId].name || window.techMap[data.assignedTechId].techName || data.techName || '-';
+                    data.techPhone = window.techMap[data.assignedTechId].phone || window.techMap[data.assignedTechId].techPhone || data.techPhone || '-';
+                }
+                
+                // Date filtering
+                let dateStr = "";
+                let ms = 0;
+                if (data.completedAt) {
+                    ms = data.completedAt.toMillis ? data.completedAt.toMillis() : new Date(data.completedAt).getTime();
+                } else if (data.createdAt) {
+                    ms = data.createdAt.toMillis ? data.createdAt.toMillis() : new Date(data.createdAt).getTime();
+                }
+                
+                if (ms > 0) {
+                    let d = new Date(ms);
+                    dateStr = d.toISOString().split('T')[0];
+                }
+                
+                let passDate = true;
+                if (startDate && dateStr < startDate) passDate = false;
+                if (endDate && dateStr > endDate) passDate = false;
+                
+                if (!passDate) return; // skip
+                
+                // Keyword filtering
+                let passKeyword = true;
+                if (searchKeyword) {
+                    const key = searchKeyword.toLowerCase();
+                    if (isTech) {
+                        const tName = (data.techName || '').toLowerCase();
+                        const tPhone = (data.techPhone || '').toLowerCase();
+                        if (!tName.includes(key) && !tPhone.includes(key)) passKeyword = false;
+                    } else {
+                        const cName = (data.customerName || '').toLowerCase();
+                        const cPhone = (data.customerPhone || '').toLowerCase();
+                        if (!cName.includes(key) && !cPhone.includes(key)) passKeyword = false;
+                    }
+                }
+                
+                if (passKeyword) {
+                    results.push(data);
+                }
+            });
+            return results;
+        }
+
+        function formatServicesAndProducts(data) {
+            let services = "-";
+            let products = "-";
+            
+            if (data.serviceDetails) {
+                if (typeof data.serviceDetails === 'string') {
+                    services = data.serviceDetails;
+                } else if (Array.isArray(data.serviceDetails)) {
+                    services = data.serviceDetails.map(s => s.name || s).join(', ');
+                }
+            }
+            
+            if (data.items && Array.isArray(data.items)) {
+                let pList = data.items.filter(item => !item.name.includes("ล้างแอร์") && !item.name.includes("ซ่อม") && !item.name.includes("บริการ"));
+                if (pList.length > 0) {
+                    products = pList.map(p => `${p.name} (x${p.qty})`).join(', ');
+                }
+                
+                let sList = data.items.filter(item => item.name.includes("ล้างแอร์") || item.name.includes("ซ่อม") || item.name.includes("บริการ"));
+                if (sList.length > 0) {
+                    services = sList.map(s => `${s.name} (x${s.qty})`).join(', ');
+                }
+            }
+            return { services, products };
+        }
+        
+        function formatDateLocal(timestamp) {
+            if (!timestamp) return "-";
+            let d;
+            if (timestamp.toDate) {
+                d = timestamp.toDate();
+            } else {
+                d = new Date(timestamp);
+            }
+            return d.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
+        }
+
+        window.loadTechHistory = async function() {
+            const tbody = document.getElementById('techHistoryTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4"><div class="spinner-border text-secondary spinner-border-sm me-2"></div>กำลังโหลดข้อมูลประวัติช่าง...</td></tr>';
+            
+            const start = document.getElementById('techHistoryStart').value;
+            const end = document.getElementById('techHistoryEnd').value;
+            const keyword = document.getElementById('techHistorySearch').value;
+            
+            try {
+                if (!window.techMap || Object.keys(window.techMap).length === 0) {
+                    const tRef = collection(db, "technicians");
+                    const tSnap = await getDocs(tRef);
+                    window.techMap = {};
+                    tSnap.forEach(doc => { window.techMap[doc.id] = doc.data(); });
+                }
+            
+                const results = await fetchHistoryData(start, end, keyword, true);
+                
+                if (results.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">ไม่พบประวัติช่างในเงื่อนไขที่ระบุ</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                results.forEach(data => {
+                    const sp = formatServicesAndProducts(data);
+                    html += `<tr>
+                        <td><small class="text-muted">${formatDateLocal(data.completedAt || data.createdAt)}</small></td>
+                        <td><div class="fw-bold">${data.techName || '-'}</div><small class="text-muted"><i class="fa-solid fa-phone me-1"></i>${data.techPhone || '-'}</small></td>
+                        <td>${sp.services}</td>
+                        <td>${sp.products}</td>
+                        <td><div class="fw-bold">${data.customerName || '-'}</div><small class="text-muted"><i class="fa-solid fa-phone me-1"></i>${data.customerPhone || '-'}</small></td>
+                        <td class="fw-bold text-success">${(data.totalPrice || 0).toLocaleString()} ฿</td>
+                        <td><span class="badge bg-secondary">${data.paymentMethod || 'ไม่ระบุ'}</span></td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+                
+            } catch(e) {
+                console.error(e);
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+            }
+        };
+        
+        window.loadCustomerHistory = async function() {
+            const tbody = document.getElementById('customerHistoryTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4"><div class="spinner-border text-warning spinner-border-sm me-2"></div>กำลังโหลดข้อมูลประวัติลูกค้า...</td></tr>';
+            
+            const start = document.getElementById('customerHistoryStart').value;
+            const end = document.getElementById('customerHistoryEnd').value;
+            const keyword = document.getElementById('customerHistorySearch').value;
+            
+            try {
+                if (!window.techMap || Object.keys(window.techMap).length === 0) {
+                    const tRef = collection(db, "technicians");
+                    const tSnap = await getDocs(tRef);
+                    window.techMap = {};
+                    tSnap.forEach(doc => { window.techMap[doc.id] = doc.data(); });
+                }
+                
+                const results = await fetchHistoryData(start, end, keyword, false);
+                
+                if (results.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">ไม่พบประวัติลูกค้าในเงื่อนไขที่ระบุ</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                results.forEach(data => {
+                    const sp = formatServicesAndProducts(data);
+                    html += `<tr>
+                        <td><small class="text-muted">${formatDateLocal(data.completedAt || data.createdAt)}</small></td>
+                        <td><div class="fw-bold">${data.customerName || '-'}</div><small class="text-muted"><i class="fa-solid fa-phone me-1"></i>${data.customerPhone || '-'}</small></td>
+                        <td>${sp.services}</td>
+                        <td>${sp.products}</td>
+                        <td><div class="fw-bold">${data.techName || '-'}</div><small class="text-muted"><i class="fa-solid fa-phone me-1"></i>${data.techPhone || '-'}</small></td>
+                        <td class="fw-bold text-success">${(data.totalPrice || 0).toLocaleString()} ฿</td>
+                        <td><span class="badge bg-secondary">${data.paymentMethod || 'ไม่ระบุ'}</span></td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+                
+            } catch(e) {
+                console.error(e);
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+            }
+        };
+
         // =============================================================
     
         
