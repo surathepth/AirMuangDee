@@ -10,6 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS for Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- html2pdf for PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f6f9; }
         .admin-header { background-color: #28a745; color: white; padding: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -53,11 +59,15 @@
                         <div class="card mb-4">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0 fw-bold"><i class="fa-solid fa-list me-2"></i>รายการจองคิวล่าสุด</h5>
-                                <button class="btn btn-outline-success btn-sm" onclick="location.reload()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชข้อมูล</button>
+                                <div>
+                                    <button class="btn btn-outline-success btn-sm me-2 rounded-pill" onclick="window.exportToExcel('bookingsTable', 'รายการจองคิวลูกค้า')"><i class="fa-solid fa-file-excel me-1"></i> Excel</button>
+                                    <button class="btn btn-outline-danger btn-sm me-2 rounded-pill" onclick="window.exportToPDF('bookingsTable', 'รายการจองคิวลูกค้า')"><i class="fa-solid fa-file-pdf me-1"></i> PDF</button>
+                                    <button class="btn btn-outline-success btn-sm" onclick="location.reload()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรช</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
+                                    <table class="table table-hover align-middle" id="bookingsTable">
                                         <thead>
                                             <tr>
                                                 <th>วันที่-เวลาจอง</th>
@@ -134,11 +144,43 @@
                       </div>
                   </div>
 
+                  <!-- Visual Analytics Dashboard -->
+                  <div class="row mb-4">
+                      <!-- Income Chart -->
+                      <div class="col-md-8">
+                          <div class="card border-0 shadow-sm rounded-4 h-100">
+                              <div class="card-header bg-white py-3 border-bottom-0 d-flex justify-content-between align-items-center">
+                                  <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-chart-bar me-2 text-primary"></i>กราฟสถิติรายได้</h6>
+                                  <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="window.renderAnalytics()"><i class="fa-solid fa-rotate me-1"></i>อัปเดตกราฟ</button>
+                              </div>
+                              <div class="card-body">
+                                  <canvas id="incomeChart" height="100"></canvas>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Top Tech Ranking -->
+                      <div class="col-md-4">
+                          <div class="card border-0 shadow-sm rounded-4 h-100">
+                              <div class="card-header bg-white py-3 border-bottom-0">
+                                  <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-trophy me-2 text-warning"></i>จัดอันดับช่างยอดเยี่ยม</h6>
+                              </div>
+                              <div class="card-body p-0">
+                                  <ul class="list-group list-group-flush" id="topTechList">
+                                      <li class="list-group-item text-center text-muted py-4">กำลังโหลดข้อมูล...</li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
                   <div class="card border-0 shadow-sm rounded-4 mb-4">
                       <div class="card-header bg-white py-3 border-bottom-0">
                           <div class="row g-3 align-items-center">
                               <div class="col-md-4">
                                   <h5 class="mb-0 fw-bold text-info"><i class="fa-solid fa-filter me-2"></i>ค้นหาและตัวกรอง</h5>
+
+
+
+
                               </div>
                               <div class="col-md-5">
                                   <div class="input-group">
@@ -154,6 +196,13 @@
                                       <input type="text" class="form-control bg-light border-0" id="filterText" placeholder="ค้นหาชื่อช่าง, เบอร์ช่าง..." onkeyup="filterReportTable()">
                                   </div>
                               </div>
+                          </div>
+                      </div>
+                      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-top">
+                          <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-table me-2 text-info"></i>ตารางรายงานสรุปยอด</h6>
+                          <div>
+                              <button class="btn btn-outline-success btn-sm me-2 rounded-pill" onclick="window.exportToExcel('reportTable', 'รายงานสรุปยอด')"><i class="fa-solid fa-file-excel me-1"></i> Excel</button>
+                              <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="window.exportToPDF('reportTable', 'รายงานสรุปยอด')"><i class="fa-solid fa-file-pdf me-1"></i> PDF</button>
                           </div>
                       </div>
                       <div class="card-body p-0">
@@ -188,6 +237,10 @@
                         <div class="card mb-4 border-0 shadow-sm rounded-4">
                             <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center rounded-top-4">
                                 <h5 class="mb-0 fw-bold text-secondary"><i class="fa-solid fa-clock-rotate-left me-2"></i>ประวัติการปฏิบัติงานของช่าง</h5>
+                                <div>
+                                    <button class="btn btn-outline-success btn-sm me-2 rounded-pill" onclick="window.exportToExcel('techHistoryTable', 'ประวัติช่าง')"><i class="fa-solid fa-file-excel me-1"></i> Excel</button>
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="window.exportToPDF('techHistoryTable', 'ประวัติช่าง')"><i class="fa-solid fa-file-pdf me-1"></i> PDF</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row g-3 mb-4">
@@ -211,7 +264,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
+                                    <table class="table table-hover align-middle" id="techHistoryTable">
                                         <thead class="table-light">
                                             <tr>
                                                 <th>วันที่ / เวลา</th>
@@ -241,6 +294,10 @@
                         <div class="card mb-4 border-0 shadow-sm rounded-4">
                             <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center rounded-top-4">
                                 <h5 class="mb-0 fw-bold text-warning"><i class="fa-solid fa-user-clock me-2"></i>ประวัติการรับบริการของลูกค้า</h5>
+                                <div>
+                                    <button class="btn btn-outline-success btn-sm me-2 rounded-pill" onclick="window.exportToExcel('customerHistoryTable', 'ประวัติลูกค้า')"><i class="fa-solid fa-file-excel me-1"></i> Excel</button>
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="window.exportToPDF('customerHistoryTable', 'ประวัติลูกค้า')"><i class="fa-solid fa-file-pdf me-1"></i> PDF</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row g-3 mb-4">
@@ -264,7 +321,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
+                                    <table class="table table-hover align-middle" id="customerHistoryTable">
                                         <thead class="table-light">
                                             <tr>
                                                 <th>วันที่ / เวลา</th>
@@ -293,11 +350,15 @@
                         <div class="card mb-4">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0 fw-bold text-primary"><i class="fa-solid fa-helmet-safety me-2"></i>รายชื่อช่างในระบบ</h5>
-                                <button class="btn btn-outline-primary btn-sm" onclick="window.fetchTechnicians()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชทีมช่าง</button>
+                                <div>
+                                    <button class="btn btn-outline-success btn-sm me-2 rounded-pill" onclick="window.exportToExcel('techsTable', 'รายชื่อช่าง')"><i class="fa-solid fa-file-excel me-1"></i> Excel</button>
+                                    <button class="btn btn-outline-danger btn-sm me-2 rounded-pill" onclick="window.exportToPDF('techsTable', 'รายชื่อช่าง')"><i class="fa-solid fa-file-pdf me-1"></i> PDF</button>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="window.fetchTechnicians()"><i class="fa-solid fa-rotate-right me-1"></i>รีเฟรชช่าง</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
+                                    <table class="table table-hover align-middle" id="techsTable">
                                         <thead>
                                             <tr>
                                                 <th>ชื่อ-นามสกุล</th>
@@ -849,6 +910,124 @@
                 tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
             }
         };
+
+        // =============================================================
+        // MASTERPIECE UPGRADES (EXPORT & ANALYTICS)
+        // =============================================================
+        window.exportToExcel = function(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if(!table) return;
+            const wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+            XLSX.writeFile(wb, `${filename}_${new Date().toISOString().split('T')[0]}.xlsx`);
+        };
+
+        window.exportToPDF = function(tableId, filename) {
+            const element = document.getElementById(tableId);
+            if(!element) return;
+            const opt = {
+                margin:       0.5,
+                filename:     `${filename}_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        };
+
+        let incomeChartInstance = null;
+        window.renderAnalytics = async function() {
+            // Only render if we have bookings
+            const bookingsRef = collection(db, "bookings");
+            const snapshot = await getDocs(bookingsRef);
+            
+            let techTotals = {};
+            let monthlyIncome = {};
+            
+            snapshot.forEach(doc => {
+                let data = doc.data();
+                if(!data.totalPrice) return;
+                
+                // Aggregate Top Tech
+                if(data.assignedTechId) {
+                    if(!techTotals[data.assignedTechId]) {
+                        techTotals[data.assignedTechId] = { name: data.techName || 'ช่างไม่ระบุชื่อ', total: 0, count: 0 };
+                    }
+                    techTotals[data.assignedTechId].total += parseFloat(data.totalPrice);
+                    techTotals[data.assignedTechId].count += 1;
+                }
+                
+                // Aggregate Income per month
+                let ms = data.completedAt ? (data.completedAt.toMillis ? data.completedAt.toMillis() : new Date(data.completedAt).getTime()) : null;
+                if(!ms && data.createdAt) ms = data.createdAt.toMillis ? data.createdAt.toMillis() : new Date(data.createdAt).getTime();
+                if(ms) {
+                    let d = new Date(ms);
+                    let monthKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}`; // YYYY-MM
+                    if(!monthlyIncome[monthKey]) monthlyIncome[monthKey] = 0;
+                    monthlyIncome[monthKey] += parseFloat(data.totalPrice);
+                }
+            });
+            
+            // Draw Chart
+            const ctx = document.getElementById('incomeChart');
+            if(ctx) {
+                const labels = Object.keys(monthlyIncome).sort();
+                const dataPoints = labels.map(l => monthlyIncome[l]);
+                
+                if(incomeChartInstance) incomeChartInstance.destroy();
+                incomeChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'รายได้รวม (บาท)',
+                            data: dataPoints,
+                            backgroundColor: 'rgba(40, 167, 69, 0.6)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 1,
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            }
+            
+            // Draw Leaderboard
+            const listEl = document.getElementById('topTechList');
+            if(listEl) {
+                let techArr = Object.values(techTotals).sort((a,b) => b.total - a.total);
+                let html = '';
+                const medals = ['<i class="fa-solid fa-medal text-warning fs-5"></i>', '<i class="fa-solid fa-medal text-secondary fs-5"></i>', '<i class="fa-solid fa-medal" style="color: #cd7f32;"></i>'];
+                
+                if(techArr.length === 0) {
+                    html = '<li class="list-group-item text-center text-muted py-4">ยังไม่มีข้อมูลยอดขาย</li>';
+                } else {
+                    techArr.slice(0, 5).forEach((t, index) => {
+                        let badge = index < 3 ? medals[index] : `<span class="badge bg-light text-dark border">${index+1}</span>`;
+                        html += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-3 py-2">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">${badge}</div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">${t.name}</h6>
+                                    <small class="text-muted">${t.count} งาน</small>
+                                </div>
+                            </div>
+                            <div class="fw-bold text-success">${t.total.toLocaleString()} ฿</div>
+                        </li>`;
+                    });
+                }
+                listEl.innerHTML = html;
+            }
+        };
+        
+        // Auto load analytics on start
+        setTimeout(() => {
+            if(window.renderAnalytics) window.renderAnalytics();
+        }, 3000);
+
 
         // =============================================================
     
