@@ -636,6 +636,16 @@
                         createdAt: serverTimestamp()
                     });
                     
+                    // --- [เพิ่มใหม่] แจ้งเตือนเข้า LINE Notify ผ่าน GAS ---
+                    const gasUrl = "https://script.google.com/macros/s/AKfycbzpV3Jc4pD8k178CcXZ3762UoNG1Xpy-Sii_i-zOQpiyCTA-uJC3I_UWxXmwoG2URjCEw/exec"; // รอใส่ URL สะพานเชื่อม
+                    const lineMessage = "\n🔴 แจ้งซ่อมใหม่ (หน้าเว็บ)!\nลูกค้า: " + name + "\nโทร: " + phone + "\nที่อยู่: " + address + "\nบริการ: " + service;
+                    fetch(gasUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'message=' + encodeURIComponent(lineMessage)
+                    }).catch(err => console.error("LINE Error: ", err));
+                    // --------------------------------------------------
                     alert("เข้าสู่ระบบ และจองคิวสำเร็จ! กำลังพาท่านไปยังหน้าระบบลูกค้า (เลขอ้างอิง: " + docRef.id + ")");
                     
                     // บันทึกข้อมูลซิงก์เข้าระบบ (Auto-Login)
